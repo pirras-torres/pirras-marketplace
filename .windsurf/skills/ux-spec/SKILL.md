@@ -1,83 +1,83 @@
 ---
 name: ux-spec
-description: Use when creating UX specifications for a software project. Defines user flows, screens, interactions, and UI copy. Writes to 03_design/.
+description: Use when creating a UX specification. Documents user flows, task analysis, navigation structure, interaction logic, and information architecture. Pure UX only — no visual design, colors, typography, or component details.
 ---
 
 # UX Specification
 
-Interview the user to define user flows, screens, interactions, and copy. Write results to `03_design/ux_spec.md`.
+Documents the user experience: what users do, how they navigate, what they achieve, and what happens when things go wrong. No visual design here — that lives in `ui-spec`.
+
+**UX covers:** flows, tasks, navigation, IA, interaction logic, error states, empty states, decision points.  
+**UX does NOT cover:** colors, typography, spacing, components, layout, visual hierarchy.
 
 ## Process
 
 ```
-Scan context → Platform + constraints → Key flows → Screen inventory
-→ Screen details (per screen) → Interaction patterns → Copy → Generate doc → Write to disk
+Scan context → Platform + constraints → Information architecture
+→ Key user flows → Per flow: steps + decision points + failure states
+→ Navigation structure → Empty and error states → Write
 ```
 
 ## Step 0 — Scan context
 
 Before asking anything:
-- Read `01_product/01_prd.md` if exists → extract product name, target user, value proposition
-- Read `01_product/05_product_journey.md` if exists → extract user journey stages
-- Read `02_business/domain_model.md` if exists → extract entities that need UI
-- Tell the user what context you found. Confirm it's current.
+- Read `01_product/01_prd.md` → product name, target user, value proposition
+- Read `01_product/04_personas.md` → who the user is
+- Read `01_product/05_product_journey.md` → journey stages
+- Read `02_business/domain_model.md` → entities the user interacts with
+- Tell user what you found. Confirm it's current.
 
-## Step 1 — Platform and constraints
+## Step 1 — Platform and scope
 
-**Q1:** "What platform(s) is this for?" (use AskUserQuestion with options)
-Options: Mobile (iOS/Android) / Web browser / Desktop app / Multiple platforms
+**Q1:** "What platform is this for?" (AskUserQuestion options: Mobile iOS/Android / Web browser / Desktop / Multiple)
 
-**Q2:** "Are there any visual or interaction constraints I should know about?" (free text)
-Examples: "must work offline", "users are not tech savvy", "dark mode required", "accessible for color blindness"
+**Q2:** "Are there experience constraints I should know about?" (free text)
+Examples: "must work offline", "users are not tech-savvy", "accessibility required (WCAG AA)", "one-handed use on mobile"
 
-## Step 2 — Key user flows
+## Step 2 — Information architecture
 
-**Q3:** "What are the 3-5 most important things a user needs to do in this product? List them as actions." (free text)
-Example: "Add a bank account", "View current available balance", "Record a purchase", "Cover a credit card payment"
+**Q3:** "What are the main sections or areas of the product? (top-level navigation)" (free text)
+Example: "Dashboard, Accounts, Transactions, Settings"
 
-For each flow the user lists, ask:
-**"Walk me through [flow name] step by step. What does the user do, what does the system do, what does the user see?"** (free text)
+**Q4:** "How do users move between sections? Describe the navigation model." (free text)
+Example: "Bottom tab bar", "Side drawer", "Top nav with nested pages", "Single-page with modals"
 
-If the user gives a vague answer, prompt: "What triggers this flow? What is the happy path? What can go wrong?"
+For each section the user lists, ask:
+**"What does [section] contain? What can the user do there?"** (free text)
 
-## Step 3 — Screen inventory
+## Step 3 — Key user flows
 
-Based on the flows described, propose a screen list. Tell the user:
-"Based on what you described, I think these are the main screens: [list]. Does this look right? What's missing?"
+**Q5:** "What are the 3-5 most critical tasks a user must complete in this product?" (free text)
+Example: "Add an account", "Record a transaction", "Check available balance", "Make a credit payment"
 
-**Q4 (confirmation):** "Here is the proposed screen list: [list]. Any screens to add, remove, or rename?" (free text)
+For each task, walk through it completely:
 
-## Step 4 — Screen details (repeat per screen)
+**Q6a:** "What triggers [task]? Where does the user start?" (free text)
 
-For each screen in the inventory, ask:
+**Q6b:** "Walk through the steps: what does the user do at each step?" (free text)
+Push for specifics: "User taps X → sees Y → selects Z → confirms → arrives at W"
 
-**Q5a:** "What is the purpose of [Screen Name]? What question does this screen answer for the user?" (free text)
+**Q6c:** "What decisions does the user make during this flow? (branching points)" (free text)
+Example: "User chooses account type → flow branches to cash / debit / credit path"
 
-**Q5b:** "What are the key elements on this screen? (list the most important data shown and actions available)" (free text)
+**Q6d:** "What can go wrong? List failure states and what the user experiences." (free text)
+Example: "Insufficient balance → system blocks action + shows message", "No accounts yet → empty state with CTA"
 
-**Q5c:** "What is the primary action on this screen?" (free text — one action per screen)
+## Step 4 — Empty states and edge cases
 
-**Q5d:** "What edge cases or empty states does this screen need to handle?" (free text)
+**Q7:** "For each main section, what does the user see when there is no data yet?" (free text)
+Empty states are UX decisions — define them explicitly, not as "TBD".
 
-Do NOT ask all 4 sub-questions at once. Ask Q5a, get answer, then Q5b, etc.
+**Q8:** "Are there states that require user action before continuing? (onboarding gates, required setup)" (free text)
 
-## Step 5 — Interaction patterns
+## Step 5 — Interaction logic
 
-**Q6:** "Are there any recurring interaction patterns? (gestures, transitions, confirmations, toasts, etc.)" (free text)
-Example: "Swipe left to delete", "Tap to expand detail", "Confirm before destructive actions"
+**Q9:** "Are there any non-obvious interaction rules? (things a developer would not guess)" (free text)
+Examples: "Deleting an account requires confirming coverage of linked transactions first", "Payments can only be made from debit/cash accounts, never from credit"
 
-**Q7:** "How does the product handle errors? What does the user see when something goes wrong?" (free text)
-
-## Step 6 — UI Copy style
-
-**Q8:** "What is the tone of voice for this product? Pick the closest." (AskUserQuestion with options)
-Options: Conversational and warm / Clear and direct / Professional and formal / Playful and casual
-
-**Q9:** "Are there any copy examples you already have? Paste them, or describe the style." (free text — optional)
+**Q10:** "What confirmations does the user need to see before irreversible actions?" (free text)
 
 ## Document Generation
-
-Generate `03_design/ux_spec.md`:
 
 ```markdown
 # UX Specification
@@ -87,86 +87,78 @@ Generate `03_design/ux_spec.md`:
 **Status:** Foundational UX spec
 **Date:** [today]
 
+> This document covers user experience only: flows, tasks, navigation, and interaction logic.
+> Visual design (colors, typography, components, spacing) is documented in `03_design/ui_spec.md`.
+
 ## 1. Context
 
-[Product name and core value from PRD]
+[Product name and core value from PRD. Target user from personas.]
 
-**Target user:** [from PRD]
+**Experience constraints:** [Q2]
 
-**Platform constraints:** [Q2]
+## 2. Information Architecture
 
-## 2. Key User Flows
+**Navigation model:** [Q4]
 
-### Flow: [Flow 1 name]
+### Sections
 
-**Trigger:** [what starts this flow]
+| Section | Purpose | Key tasks |
+|---------|---------|-----------|
+| [section 1] | [Q3 purpose] | [Q3 tasks] |
+| [...] | [...] | [...] |
+
+## 3. User Flows
+
+### Flow: [Task name]
+
+**Trigger:** [Q6a — where user starts]
 
 **Steps:**
-1. [User action]
-2. [System response]
+1. User: [action] → System: [response/state change]
+2. User: [action] → System: [response]
 3. [...]
 
-**Happy path outcome:** [what success looks like]
+**Decision points:**
+- If [condition A] → [path A]
+- If [condition B] → [path B]
 
-**Failure states:** [what can go wrong]
+**Failure states:**
+- [Failure 1]: [what user experiences]
+- [Failure 2]: [what user experiences]
+
+**End state:** [what success looks like for the user]
 
 ---
 
 [Repeat for each flow]
 
-## 3. Screen Inventory
+## 4. Empty States
 
-| Screen | Purpose | Key action |
-|--------|---------|------------|
-| [Screen 1] | [Q5a] | [Q5c] |
-| [...] | [...] | [...] |
+| Section | Empty state | User action available |
+|---------|------------|----------------------|
+| [section] | [Q7 description] | [CTA or none] |
 
-## 4. Screen Details
+## 5. Onboarding and Gates
 
-### [Screen 1]
+[Q8 — required setup or onboarding gates before core flows are available]
 
-**Purpose:** [Q5a]
+## 6. Interaction Rules
 
-**Key elements:**
-- [Data/element 1]
-- [Data/element 2]
-- [...]
+[Q9 — non-obvious rules the system enforces]
 
-**Primary action:** [Q5c]
-
-**Edge cases:**
-- Empty state: [description]
-- [Other edge case]
-
----
-
-[Repeat for each screen]
-
-## 5. Interaction Patterns
-
-[Q6 — recurring patterns]
-
-**Error handling:** [Q7]
-
-## 6. Copy Style
-
-**Tone:** [Q8]
-
-**Style notes:** [Q9 if provided]
-
-**Key copy principles:**
-- [Derived from tone and style]
+**Confirmations required before irreversible actions:**
+[Q10]
 ```
 
 ## File Output
 
-- Create `03_design/` folder if missing
+- Create `03_design/` if missing
 - Write to `03_design/ux_spec.md`
-- After writing, offer to create `03_design/prototype_docs.md` with annotated screen descriptions using `kick-development:prototype-docs`
+- After writing, offer to create `03_design/ui_spec.md` using `kick-development:ui-spec`
 
 ## Quality Check Before Writing
 
-- Every screen has a defined primary action
-- Every key flow has at least one failure state defined
-- Empty states are specified for screens that can have no data
-- Copy tone is consistent and can be tested against a real sentence
+- Every flow has at least one failure state
+- Every section has an empty state defined
+- No mention of colors, fonts, spacing, or component names
+- Interaction rules reference domain entities (from domain model), not visual elements

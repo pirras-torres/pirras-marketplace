@@ -12,38 +12,49 @@ Interview the user to define the product's guiding principles. Write to `01_prod
 Principles are decision-making rules. When the team faces a trade-off, principles resolve it.
 A good principle: takes a position, explains why, and can be violated intentionally when noted.
 
-Bad: "We value quality." (not a decision rule)
+Bad: "We value quality." (not a decision rule)  
 Good: "Clarity over completeness — show less if it means the user understands more." (resolves trade-offs)
 
 ## Process
 
 ```
-Scan context → Collect trade-off scenarios → Extract principles → Prioritize → Write
+Scan context → 3 trade-off scenarios → 4 anchoring questions → Derive principles → Write
 ```
 
 ## Step 0 — Scan context
 
-Read `01_product/01_prd.md` if exists. Extract product vision and value proposition.
+Read `01_product/01_prd.md` if exists. Extract product vision and value proposition. Use it to make questions specific to this product, not generic.
 
 ## Interview (one question at a time with AskUserQuestion)
 
-**Q1:** "Think of a decision you or the team made about this product. What was the trade-off and what did you choose?" (free text)
-Ask this 3 times (repeat Q1 for 3 different decisions). Each answer is raw material for a principle.
+**Trade-off scenarios** — ask each separately:
 
-**Q2:** "When you must choose between [simplicity vs power], what does this product favor?" (free text)
+**Q1a:** "Describe a real decision you made about this product where you had to choose between two valid options. What were the options and what did you choose?" (free text)
 
-**Q3:** "When you must choose between [speed of delivery vs quality], what does this product favor?" (free text)
+**Q1b:** "Describe a second decision with a trade-off — different from the first." (free text)
 
-**Q4:** "What is the ONE thing this product must never do, even if it would make it more popular?" (free text)
+**Q1c:** "Describe a third trade-off decision." (free text)
 
-**Q5:** "What is the ONE thing this product always does, even when it adds complexity?" (free text)
+Each answer becomes raw material for one principle. If the user struggles, offer an example: "For example: 'We chose to show less data on the main screen rather than showing everything — prioritized clarity over completeness.'"
+
+**Anchoring questions:**
+
+**Q2:** "When this product must choose between simplicity and power/flexibility, which does it favor?" (free text)
+
+**Q3:** "When this product must choose between speed of delivery and quality/polish, which does it favor?" (free text)
+
+**Q4:** "What is the ONE thing this product must never do, even if it would make it more popular or easier to build?" (free text)
+
+**Q5:** "What is the ONE thing this product always does, even when it adds complexity or cost?" (free text)
 
 ## Document Generation
 
-From the user's answers, derive 4-7 principles. Each principle:
-- Has a name (3-6 words, active voice)
-- Has a rationale (1-2 sentences why)
-- Has an example of what it means in practice
+From Q1a–Q1c and Q2–Q5, derive 4–7 principles. Each principle must:
+- Have a name (3–6 words, active voice, takes a position)
+- Have a rationale (1–2 sentences why this product specifically holds this principle)
+- Have a concrete example of what it means in practice for this product
+
+Order principles by importance — the first one wins when two conflict.
 
 ```markdown
 # Product Principles
@@ -57,17 +68,24 @@ When facing a trade-off, check which principle applies. If two principles confli
 
 ## Principles
 
-### 1. [Principle Name]
+### 1. [Principle Name — active voice, takes a position]
 
-[Rationale in 1-2 sentences]
+[Rationale: why this product holds this principle — 1-2 sentences]
 
-**In practice:** [Concrete example]
+**In practice:** [Concrete example specific to this product]
 
 ---
 
-[Repeat for each principle — 4-7 total]
+[Repeat for each principle — 4–7 total]
 ```
 
 ## File Output
 
 Write to `01_product/03_product_principles.md`. Create folder if missing.
+
+## Quality Check Before Writing
+
+- Every principle takes a position (not "we value X" but "X over Y when Z")
+- Every principle has a concrete example from this product's domain
+- At least one principle came from a real trade-off the user described
+- No two principles say the same thing in different words
