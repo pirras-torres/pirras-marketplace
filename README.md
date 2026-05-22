@@ -2,9 +2,9 @@
 
 Skills for building software projects incrementally with Scrum documentation.
 
-Each skill interviews you section by section and writes a `.md` file to your project. All skills are autonomous — run any one independently, or use the `guide` skill to navigate.
+Each skill reads existing project docs for context, interviews you on decisions relevant to YOUR project, and writes `.md` files. All skills are autonomous — run any one independently, or use the `guide` skill to navigate.
 
-## Skills
+## Skills (19)
 
 | Skill | Output | Phase |
 |-------|--------|-------|
@@ -18,10 +18,10 @@ Each skill interviews you section by section and writes a `.md` file to your pro
 | `business-rules` | `02_business/business_rules.md` | Business |
 | `data-model` | `02_business/data_model.md` | Business |
 | `ux-spec` | `03_design/ux_spec.md` | Design |
-| `prototype-docs` | `03_design/prototype_docs.md` | Design |
+| `ui-spec` | `03_design/ui_spec.md` | Design |
 | `backend-architecture` | `04_tech/backend_architecture.md` | Tech |
 | `frontend-architecture` | `04_tech/frontend_architecture.md` | Tech |
-| `slices-discovery` | `04_tech/slices_discovery.md` | Tech |
+| `slices-discovery` | `05_scrum/discovery/S#.md` | Scrum |
 | `backlog` | `05_scrum/backlog.md` | Scrum |
 | `definition-of-ready` | `05_scrum/definition_of_ready.md` | Scrum |
 | `definition-of-done` | `05_scrum/definition_of_done.md` | Scrum |
@@ -34,8 +34,14 @@ Each skill interviews you section by section and writes a `.md` file to your pro
 2. Business phase
 3. Design phase
 4. Tech phase
-5. Scrum phase
+5. Scrum phase (`slices-discovery` before `backlog`)
 6. Decisions phase
+
+## Key Dependencies
+
+- `backlog` requires at least one `05_scrum/discovery/S#.md` (run `slices-discovery` first)
+- `backend-architecture` and `frontend-architecture` adapt to whatever docs already exist
+- All other skills are autonomous
 
 ## Install
 
@@ -48,7 +54,8 @@ Or clone locally and register as a local plugin.
 ## How It Works
 
 Each skill:
-1. Scans existing docs in your project for context
-2. Interviews you section by section using AskUserQuestion
-3. Generates the document
-4. Writes the `.md` file to the appropriate folder
+1. Scans existing project docs for context
+2. Determines what decisions/questions are relevant to THIS project
+3. Interviews you using AskUserQuestion
+4. Generates the document
+5. Writes the `.md` file to the appropriate folder

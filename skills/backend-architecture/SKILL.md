@@ -1,43 +1,111 @@
 ---
 name: backend-architecture
-description: Use when creating a backend architecture document. Defines the technical stack, API design, data access patterns, and service structure. Writes to 04_tech/.
+description: Use when creating a backend architecture document. Reads existing project docs to determine what decisions matter for this specific project, then interviews accordingly. Writes to 04_tech/.
 ---
 
 # Backend Architecture
 
-Interview the user to define backend architecture decisions. Write to `04_tech/backend_architecture.md`.
+Adaptive skill. Reads existing project documents first, determines which architectural decisions are relevant to THIS project, then interviews the user on those specific decisions.
+
+No fixed template — sections are derived from what the project needs.
 
 ## Process
 
 ```
-Scan context → Stack decisions → API design → Data access → Auth → Non-functional → Write
+Scan all docs → Identify relevant decision areas → Interview on those areas only
+→ Generate doc with sections appropriate to this project → Write
 ```
 
-## Step 0 — Scan context
+## Step 0 — Deep context scan
 
-Read `02_business/domain_model.md` and `02_business/data_model.md` if they exist.
-Read `01_product/01_prd.md` for scale and non-functional hints.
+Read ALL of the following that exist:
 
-## Interview (one question at a time with AskUserQuestion)
+| Document | What to extract |
+|----------|----------------|
+| `01_product/01_prd.md` | Scale hints, user type, offline needs, performance expectations |
+| `01_product/03_product_principles.md` | Technical implications of each principle |
+| `02_business/domain_model.md` | Entities, subdomains, invariants — shapes API structure |
+| `02_business/business_rules.md` | Rules that must be enforced server-side |
+| `02_business/data_model.md` | Tables, relationships, query patterns |
+| `03_design/ux_spec.md` | Flows that need API support, real-time needs, offline flows |
+| `05_scrum/discovery/S*.md` | Slice scopes — what backend work is coming first |
 
-**Q1:** "What is the primary backend language/framework?" (free text or "not decided")
+After reading, tell the user:
+> "I found [list of docs]. Based on these, the decisions that matter most for this project's backend are: [list decisions you identified]. I'll focus the interview on these."
 
-**Q2:** "What API style will you use?" (options: REST / GraphQL / tRPC / gRPC / Not decided)
+Then ask: "Is there anything I missed or a concern I should add?" (free text)
 
-**Q3:** "How will the backend be deployed?" (options: Single server / Serverless functions / Containers / Not decided)
+## Decision Area Detection
 
-**Q4:** "What is the database?" (free text — mention type and specific tech)
+Based on what you found, determine which of these areas need decisions:
 
-**Q5:** "How will authentication work?" (options: JWT tokens / Session-based / OAuth/SSO / Magic link / Not decided)
+**Always ask:**
+- Stack (language, framework)
+- API style
+- Authentication
 
-**Q6:** "How is the backend structured internally?" (options: Monolith / Modular monolith / Microservices / Not decided)
+**Ask if data_model.md exists or entities found:**
+- Data access patterns and ORM strategy
+- Query performance risks (N+1, large joins)
 
-**Q7:** "What are the top 3 non-functional requirements?" (free text)
-Example: "Response < 200ms for reads", "Offline-capable", "Single user — no multi-tenancy needed"
+**Ask if business_rules.md has complex invariants:**
+- Where rules are enforced (DB constraints vs application layer vs both)
+- Transaction strategy
 
-**Q8:** "What are the riskiest technical decisions you haven't made yet?" (free text)
+**Ask if ux_spec.md has real-time features (live updates, notifications):**
+- Real-time strategy (websockets, polling, SSE)
+
+**Ask if PRD suggests mobile or offline:**
+- Sync strategy
+- Offline-first vs online-required
+
+**Ask if multiple subdomains in domain model:**
+- Internal module/service boundaries
+- How subdomains map to code structure
+
+**Ask if slices exist:**
+- What the first slice needs from the backend (informs what to build first)
+
+**Ask if no existing docs:**
+- Fall back to standard questions: stack, API style, auth, deployment, DB, structure
+
+## Interview
+
+Ask ONLY the questions relevant to this project based on Step 0. Use AskUserQuestion. One question at a time.
+
+For each decision area identified, ask the specific question. Examples:
+
+**Stack:**
+"What is the backend language and framework?" (free text or "not decided")
+
+**API style:**
+"What API style?" (options: REST / GraphQL / tRPC / gRPC / Not decided)
+
+**Auth:**
+"How will authentication work?" (options: JWT / Session / OAuth/SSO / Magic link / Not decided)
+Follow up if needed: "Any authorization model? (roles, per-resource permissions, none)"
+
+**Data access (if data model exists):**
+"For [Entity from data_model], what are the most frequent read patterns? Any risk of large result sets?" (free text)
+
+**Rule enforcement (if complex business rules found):**
+"[Rule X] from business_rules.md — enforced at DB level (constraint), application level, or both?" (per critical rule)
+
+**Real-time (if ux_spec suggests it):**
+"[Flow X] in UX spec seems to need live updates. How should this work?" (options: Polling / WebSockets / Server-Sent Events / Not needed / Not decided)
+
+**Module boundaries (if multiple subdomains):**
+"How do the [subdomain list] subdomains map to code structure?" (options: Single module / Feature folders / Separate packages / Not decided)
+
+**Error handling:**
+"What is the error response format? How does the API communicate failures to clients?" (free text)
+
+**Deployment:**
+"How will the backend be deployed?" (options: Single server / Serverless / Containers / Not decided)
 
 ## Document Generation
+
+Generate sections based on what was actually discussed. Do not include empty sections.
 
 ```markdown
 # Backend Architecture
@@ -45,38 +113,47 @@ Example: "Response < 200ms for reads", "Offline-capable", "Single user — no mu
 **Project:** [name]
 **Date:** [today]
 
-## Stack
+## Context
+
+[Brief summary of what existing docs informed this architecture — which docs were read, key constraints found]
+
+## Stack Decisions
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
-| Language/Framework | [Q1] | [reason] |
-| API style | [Q2] | [reason] |
-| Deployment | [Q3] | [reason] |
-| Database | [Q4] | [reason] |
-| Auth | [Q5] | [reason] |
-| Structure | [Q6] | [reason] |
+| Language/Framework | [answer] | [why, linked to project context] |
+| API style | [answer] | [why] |
+| Auth | [answer] | [why] |
+| Deployment | [answer] | [why] |
+| [other decisions made] | | |
 
 ## Internal Structure
 
-[Q6 — describe how code is organized: modules, layers, boundaries]
+[How the backend is organized internally — derived from subdomain analysis if available]
+
+## Data Access
+
+[Only if data_model.md existed — key patterns, ORM choice, query risks identified]
+
+## Business Rule Enforcement
+
+[Only if complex rules found — where each critical rule is enforced and why]
 
 ## API Design Conventions
 
-[Derived from Q2 — naming, versioning, error format, pagination]
+[Error format, versioning, pagination, naming — based on API style chosen]
 
-## Data Access Patterns
+## [Real-time / Sync] (only if applicable)
 
-[From domain model — how entities are read/written, what queries are most frequent]
+[Strategy and rationale — only if ux_spec or PRD indicated this is needed]
 
-## Non-Functional Requirements
+## First Slice Backend Needs
 
-1. [Q7 requirement 1] — [how it's addressed architecturally]
-2. [Q7 requirement 2]
-3. [Q7 requirement 3]
+[Only if slices exist — what the backend must deliver for S1]
 
 ## Open Decisions
 
-[Q8 — undecided items with context for when/how to decide]
+[Questions that came up but weren't resolved — with context for when to decide]
 ```
 
 ## File Output

@@ -1,62 +1,93 @@
 ---
 name: backlog
-description: Use when creating or populating a product backlog. Generates user stories from existing product docs, prioritizes them, and writes to 05_scrum/.
+description: Use when creating backlog items (PBIs) for a software project. Requires slice discovery documents to exist. Generates verifiable user stories per slice and writes to 05_scrum/.
 ---
 
 # Backlog
 
-Generate a prioritized product backlog. Writes to `05_scrum/backlog.md`.
+Generate PBIs (Product Backlog Items) from completed slice discovery documents. Each story is traceable to a slice.
+
+**Requires:** At least one `05_scrum/discovery/S#.md` file.  
+**Does not generate:** epics invented from thin air, stories without slice traceability, estimates without scope.
 
 ## Process
 
 ```
-Scan context → Identify epics → Per epic: stories → Acceptance criteria → Priority → Write
+Scan slices → Select slices to backlog → Per slice: generate stories
+→ User reviews + adjusts → Write
 ```
 
-## Step 0 — Scan context (critical)
+## Step 0 — Scan slices (required)
 
-Read the following if they exist:
-- `01_product/01_prd.md` → product scope and value
-- `01_product/05_product_journey.md` → user journey stages
-- `02_business/domain_model.md` → entities and operations
-- `03_design/ux_spec.md` → screens and flows
-
-Tell the user: "I found [list of docs]. I'll derive the backlog from these. Tell me if anything is outdated."
-
-## Interview (one question at a time with AskUserQuestion)
-
-**Q1:** "What is the scope of this backlog? (all features / specific sprint / MVP only)" (AskUserQuestion options: Full product / MVP only / Next sprint / Specific feature)
-
-**Q2 (if MVP):** "What is the absolute minimum the product must do to deliver value to the first user?" (free text)
-
-**Q3:** "What functionality is OUT of scope for this backlog?" (free text — prevents story creep)
-
-**Q4:** "How should stories be prioritized?" (options: MoSCoW / Business value + effort / User journey order / WSJF)
-
-## Epic Generation
-
-From the scanned docs, propose epics. Tell the user:
-"Based on the docs, I propose these epics: [list]. Correct, add, or remove any."
-
-Confirm the epic list before generating stories.
-
-## Story Generation
-
-For each epic, generate 3-7 stories using this format:
-
+Run:
+```bash
+find 05_scrum/discovery -name "S*.md" | sort
 ```
-As a [persona], I want to [action], so that [outcome].
+
+Also read:
+- `01_product/04_personas.md` → for "As a [persona]" format
+- `05_scrum/definition_of_ready.md` → if exists, use its AC format
+
+**If no slice files found:**
+> "No slice discovery documents found in 05_scrum/discovery/. Backlog requires at least one completed slice. Run kick-development:slices-discovery first."
+
+Stop and offer to invoke `kick-development:slices-discovery`.
+
+**If slices found:** List them to the user:
+> "Found [N] slice(s): [S1: name], [S2: name], ..."
+
+## Step 1 — Select scope
+
+**Q1:** "Which slices should I generate PBIs for?" (AskUserQuestion)
+Options: All slices / Only S[N] / Select specific ones (list them)
+
+If user selects specific ones, ask which by name.
+
+## Step 2 — Per slice: story generation
+
+For each selected slice, read its `S#.md` fully. Extract:
+- Scope (inside/outside)
+- Business rules affected
+- UX flows involved
+- Frontend/backend work described
+- Decisions and assumptions
+
+Generate 3–7 stories per slice following this logic:
+- One story per meaningful user-visible capability within the slice scope
+- If scope has multiple distinct user actions → multiple stories
+- If scope is thin → fewer stories, don't pad
+- Stories stay within the slice's explicit scope — nothing from "outside" section
+
+**Story format:**
+```
+As a [persona from personas.md or "user"], I want [action], so that [outcome].
 
 Acceptance criteria:
-- [ ] [criterion 1]
-- [ ] [criterion 2]
-- [ ] [criterion 3]
+- [ ] [What "done" looks like end-to-end — user visible]
+- [ ] [Key business rule enforced — reference rule if applicable]
+- [ ] [Failure/edge case handled]
 
-Story points: [1/2/3/5/8]
-Priority: [Must/Should/Could/Won't]
+Story points: [1 / 2 / 3 / 5 / 8]
+Priority: [Must / Should / Could / Won't]
+Slice: [S#]
 ```
 
-After generating, ask the user: "Are there missing stories? Any that should be split or merged?" (free text)
+**Story point guide:**
+- 1 = trivial, no unknowns, < half a day
+- 2 = simple, clear, 1 day
+- 3 = moderate, some decisions, 2–3 days
+- 5 = complex, multiple moving parts, most of a sprint
+- 8 = too big — must be split before sprint
+
+If a story estimates to 8, flag it: "This story may be too large. Consider splitting."
+
+After generating stories for each slice, show them to the user and ask:
+**"Are there missing stories, stories to split, or stories to remove for [Slice S#]?"** (free text)
+
+## Step 3 — Prioritization
+
+**Q2:** "How should stories be prioritized across slices?" (AskUserQuestion)
+Options: MoSCoW / Slice order (S1 before S2) / Business value first / As generated
 
 ## Document Generation
 
@@ -64,42 +95,46 @@ After generating, ask the user: "Are there missing stories? Any that should be s
 # Product Backlog
 
 **Project:** [name]
-**Scope:** [Q1]
 **Date:** [today]
-**Prioritization:** [Q4]
-
-## Out of Scope
-
-[Q3]
+**Slices covered:** [S1, S2, ...]
+**Prioritization:** [Q2]
 
 ---
 
-## Epic 1: [Epic Name]
+## S[N]: [Slice name]
 
-**Goal:** [what this epic achieves for the user]
+> Derived from: `05_scrum/discovery/S[N].md`
 
-### Story 1.1
+### Story [N].1: [Short title]
 
-**As a** [persona], **I want to** [action], **so that** [outcome].
+**As a** [persona], **I want** [action], **so that** [outcome].
 
 **Acceptance criteria:**
-- [ ] [criterion]
-- [ ] [criterion]
+- [ ] [criterion 1]
+- [ ] [criterion 2]
+- [ ] [criterion 3]
 
-**Story points:** [estimate]
-**Priority:** [Must/Should/Could/Won't]
+**Story points:** [estimate]  
+**Priority:** [Must/Should/Could/Won't]  
+**Slice:** S[N]
 
 ---
 
-[Repeat per story and epic]
+[Repeat per story]
 
-## Backlog Summary
+---
 
-| Epic | Stories | Total SP | Priority |
-|------|---------|----------|----------|
-| [Epic 1] | [n] | [total] | Must |
+[Repeat section per slice]
+
+## Summary
+
+| Slice | Stories | Total SP | Must stories |
+|-------|---------|----------|--------------|
+| S[N] | [n] | [total] | [n must] |
+| **Total** | | | |
 ```
 
 ## File Output
 
-Write to `05_scrum/backlog.md`. Create folder if missing.
+Write to `05_scrum/backlog.md`. Create folder if missing.  
+If file exists, ask: "Overwrite or append new slices?"
