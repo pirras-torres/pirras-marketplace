@@ -1,42 +1,74 @@
 ---
 name: business-rules
-description: Use when creating a Business Rules document. Defines the explicit constraints, validations, and policies the system must enforce. Writes to 02_business/.
+description: Use when creating a Business Rules document. Starts from invariants already defined in the domain model, then expands with additional rules per subdomain. Writes to 02_business/.
 ---
 
 # Business Rules
 
-Interview the user to define business rules per domain area. Write to `02_business/business_rules.md`.
+Define business rules per domain area. Starts from what's already in the domain model — doesn't ask again for what's known.
 
 ## Process
 
 ```
-Scan context → Per subdomain: rules → Validation rules → State transition rules → Write
+Read domain model → Present known invariants → Expand per subdomain
+→ Validation rules → State transitions → Write
 ```
 
-## Step 0 — Scan context
+## Step 0 — Read domain model (required)
 
-Read `02_business/domain_model.md` if exists. Extract: subdomains and invariants. Tell the user what you found and use it as the starting point.
+Read `02_business/domain_model.md`. Extract:
+- All invariants from section 6
+- All subdomains with their responsibilities
+- Entities and their states (if defined)
 
-## Interview (one question at a time with AskUserQuestion)
+**If domain model doesn't exist:** tell user to run `kick-development:domain-model` first. Business rules need the domain model as foundation.
 
-**Q1:** "Which subdomains have the most critical business rules?" (free text — user names 2-5 subdomains)
+Tell user:
+> "I found [N] invariants in the domain model: [list them]. These will be included as Critical Rules. Now I'll ask about additional rules per subdomain."
 
-For each subdomain the user names, ask:
+---
 
-**Q2:** "What rules govern [subdomain name]? List them as 'must', 'cannot', 'only when', or 'always'." (free text)
+## Step 1 — Confirm and extend critical rules
 
-Example format:
-- A withdrawal CANNOT exceed available balance
-- A purchase MUST be associated with exactly one account
-- A credit payment ONLY applies to a credit account
+**Q1:** "The domain model defines these invariants: [list]. Are any of these wrong or outdated? Anything to add?" (free text or "All correct")
 
-**Q3:** "What data validations exist? (required fields, formats, ranges, uniqueness)" (free text)
+---
 
-**Q4:** "Are there state machines? (things that have lifecycle states with rules about transitions)" (free text)
-Example: "An Apartado can only be ACTIVE or DISSOLVED. It transitions to DISSOLVED only when fully consumed."
+## Step 2 — Per subdomain rules
 
-**Q5:** "What are the top 3 rules that, if violated, would corrupt data or break user trust?" (free text)
-These become the CRITICAL rules — highlighted in the document.
+For each subdomain found in the domain model, ask:
+
+**Q2:** "What additional rules govern [subdomain name] beyond the invariants already listed? Use: 'must', 'cannot', 'only when', 'always'." (free text or "None beyond invariants")
+
+Ask per subdomain. Skip subdomains where user answers "None."
+
+---
+
+## Step 3 — Validation rules
+
+**Q3:** "What data validations exist? (required fields, formats, value ranges, uniqueness constraints)" (free text)
+Example: "Amount must be > 0. Account name max 100 chars. Email must be unique per user."
+
+---
+
+## Step 4 — State transitions
+
+If the domain model defined entities with states, ask for each:
+
+**Q4:** "Entity [X] has states [list from domain model]. What are the allowed transitions and conditions for each?" (free text)
+Example: "Apartado: Active → Dissolved when fully consumed. Cannot go back to Active once Dissolved."
+
+If no states in domain model: skip this step.
+
+---
+
+## Step 5 — Frontend vs backend enforcement
+
+**Q5:** "Which critical rules should the frontend enforce for UX feedback (not just the backend)?" (free text or "None — backend only")
+
+This determines which rules need client-side validation vs. server-only enforcement.
+
+---
 
 ## Document Generation
 
@@ -45,19 +77,20 @@ These become the CRITICAL rules — highlighted in the document.
 
 **Project:** [name]
 **Date:** [today]
+**Source:** Derived from `02_business/domain_model.md` + additional rules
 
 ## 1. Critical Rules (must never be violated)
 
-1. [Q5 rule 1]
-2. [Q5 rule 2]
-3. [Q5 rule 3]
+These rules, if broken, corrupt data or destroy user trust. Enforced at all layers.
+
+1. [Invariant from domain model + Q1 additions]
+2. [...]
 
 ## 2. Rules by Subdomain
 
 ### [Subdomain 1]
 
-- [rule 1]
-- [rule 2]
+- [rule — phrased as must/cannot/only when/always]
 - [...]
 
 ### [Subdomain 2]
@@ -66,22 +99,36 @@ These become the CRITICAL rules — highlighted in the document.
 
 ## 3. Validation Rules
 
-| Field | Validation | Error message |
-|-------|-----------|---------------|
-| [field] | [rule] | [message] |
+| Field / Entity | Validation | Error message |
+|----------------|-----------|---------------|
+| [field] | [rule] | [message shown to user] |
 
 ## 4. State Transitions
 
 ### [Entity with states]
 
-**States:** [list states]
+**States:** [list]
 
-**Transitions:**
-- [State A] → [State B] when: [condition]
-- [State B] → [State C] when: [condition]
-- [State B] → [State A] NEVER (irreversible)
+**Allowed transitions:**
+- [State A] → [State B]: when [condition]
+- [State B] → [State C]: when [condition]
+- [State B] → [State A]: **never** (irreversible)
+
+## 5. Frontend vs Backend Enforcement
+
+| Rule | Backend | Frontend |
+|------|---------|----------|
+| [rule] | ✅ always | ✅ UX feedback |
+| [rule] | ✅ always | ❌ backend only |
 ```
 
 ## File Output
 
 Write to `02_business/business_rules.md`. Create folder if missing.
+
+## Quality Check Before Writing
+
+- Every invariant from domain model appears in Critical Rules
+- Rules use enforcement language (must/cannot/only when), not description language
+- Validation rules have user-facing error messages
+- State transitions explicitly mark irreversible ones

@@ -2,13 +2,15 @@
 
 Skills for building software projects incrementally with Scrum documentation.
 
-Each skill reads existing project docs for context, interviews you on decisions relevant to YOUR project, and writes `.md` files. All skills are autonomous — run any one independently, or use the `guide` skill to navigate.
+**Start every session with:** `kick-development:guide`
 
-## Skills (19)
+The guide reads `project_memory.md`, determines your current phase, and tells you exactly what to do next.
+
+## Skills (21)
 
 | Skill | Output | Phase |
 |-------|--------|-------|
-| `guide` | — | Navigator |
+| `guide` | `project_memory.md` | Orchestrator |
 | `prd` | `01_product/01_prd.md` | Product |
 | `product-goal` | `01_product/02_product_goal.md` | Product |
 | `product-principles` | `01_product/03_product_principles.md` | Product |
@@ -21,27 +23,41 @@ Each skill reads existing project docs for context, interviews you on decisions 
 | `ui-spec` | `03_design/ui_spec.md` | Design |
 | `backend-architecture` | `04_tech/backend_architecture.md` | Tech |
 | `frontend-architecture` | `04_tech/frontend_architecture.md` | Tech |
-| `slices-discovery` | `05_scrum/discovery/S#.md` | Scrum |
-| `backlog` | `05_scrum/backlog.md` | Scrum |
 | `definition-of-ready` | `05_scrum/definition_of_ready.md` | Scrum |
 | `definition-of-done` | `05_scrum/definition_of_done.md` | Scrum |
+| `slices-discovery` | `05_scrum/discovery/S#.md` | Scrum |
+| `backlog` | `05_scrum/backlog.md` | Scrum |
+| `sprint-planning` | `05_scrum/sprints/sprint-N.md` | Scrum |
+| `sprint-review` | updates `sprints/sprint-N.md` + `project_memory.md` | Scrum |
 | `risk-docs` | `06_decisions/risk_docs.md` | Decisions |
 | `decision-docs` | `06_decisions/adr-N-slug.md` | Decisions |
 
-## Recommended Order for New Projects
+## The Incremental Cycle
 
-1. Product phase (start with `prd`)
-2. Business phase
-3. Design phase
-4. Tech phase
-5. Scrum phase (`slices-discovery` before `backlog`)
-6. Decisions phase
+```
+FOUNDATION (once)
+  prd → product-goal → product-principles → personas → product-journey
+  domain-model → business-rules → data-model
+  ux-spec → ui-spec
+
+ARCHITECTURE (once, updated when decisions change)
+  backend-architecture → frontend-architecture
+  definition-of-ready → definition-of-done
+  risk-docs
+
+SLICE CYCLE (repeats)
+  slices-discovery → backlog → sprint-planning
+  → BUILD → sprint-review
+  → next slice or update docs
+```
 
 ## Key Dependencies
 
-- `backlog` requires at least one `05_scrum/discovery/S#.md` (run `slices-discovery` first)
-- `backend-architecture` and `frontend-architecture` adapt to whatever docs already exist
-- All other skills are autonomous
+- `business-rules` requires `domain-model`
+- `data-model` requires `domain-model`
+- `backlog` requires at least one `05_scrum/discovery/S#.md`
+- `sprint-planning` requires `backlog` + `definition-of-ready`
+- `sprint-review` requires an active sprint plan
 
 ## Install
 
@@ -49,13 +65,10 @@ Each skill reads existing project docs for context, interviews you on decisions 
 /plugin install kick-development@<your-marketplace>
 ```
 
-Or clone locally and register as a local plugin.
-
 ## How It Works
 
-Each skill:
-1. Scans existing project docs for context
-2. Determines what decisions/questions are relevant to THIS project
-3. Interviews you using AskUserQuestion
-4. Generates the document
-5. Writes the `.md` file to the appropriate folder
+1. `guide` reads `project_memory.md` and current doc state
+2. Determines phase: Foundation / Architecture / Slice Cycle
+3. Suggests concrete next action
+4. Invokes the right skill
+5. Updates `project_memory.md` after each action

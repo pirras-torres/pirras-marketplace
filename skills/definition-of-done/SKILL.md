@@ -1,41 +1,70 @@
 ---
 name: definition-of-done
-description: Use when creating a Definition of Done for a Scrum team. Defines the criteria a user story must meet before it is considered complete. Writes to 05_scrum/.
+description: Use when creating a Definition of Done for a Scrum team. Reads Product Goal, principles, architecture, and slice risk docs to suggest criteria, then interviews the user to confirm. Writes to 05_scrum/.
 ---
 
 # Definition of Done
 
-Interview the user to define when a story is truly complete. Write to `05_scrum/definition_of_done.md`.
+Define when a story and a sprint increment are truly complete. Reads existing docs to suggest criteria — user confirms or adjusts.
+
+DoD applies to every increment. A story is Done only when ALL criteria are met. Partial is not Done.
 
 ## Process
 
 ```
-Scan context → Code criteria → Testing criteria → Documentation criteria → Deployment criteria → Write
+Scan docs → Derive suggested criteria → User confirms per category → Write
 ```
 
-## Step 0 — Scan context
+## Step 0 — Deep scan
 
-Read `01_product/01_prd.md` and any tech architecture docs if they exist.
+Read ALL of the following that exist:
 
-## Interview (one question at a time with AskUserQuestion)
+| Doc | What to extract |
+|-----|----------------|
+| `01_product/02_product_goal.md` | Outcome criteria — what does "valuable increment" mean for this product? |
+| `01_product/03_product_principles.md` | Quality standards embedded in principles (e.g., "clarity over completeness" → UI must show clear state) |
+| `03_design/ux_spec.md` | UI states to verify: empty states, error states, interaction rules |
+| `03_design/ui_spec.md` | Visual correctness to verify: component usage, spacing, states |
+| `04_tech/backend_architecture.md` | Testing strategy, deployment pipeline, API standards |
+| `04_tech/frontend_architecture.md` | Testing framework, error handling patterns, accessibility |
+| `06_decisions/risk_docs.md` | Risk mitigations that must be verified before Done |
 
-**Q1:** "What CODE standards must be met?" (free text)
-Example: "Code reviewed by at least 1 other dev", "No linting errors", "Follows agreed naming conventions"
+After reading, derive suggested criteria per category. Tell user:
+> "Based on your docs, I'm suggesting these DoD criteria. Review each and adjust."
 
-**Q2:** "What TESTING requirements must be met?" (free text)
-Example: "Unit tests written and passing", "Happy path manually tested", "Edge cases in acceptance criteria tested"
+---
 
-**Q3:** "What DOCUMENTATION is required?" (free text or N/A)
-Example: "API endpoints documented", "README updated if new setup steps", "Decision recorded in decision log"
+## Interview — confirm per category
 
-**Q4:** "What DEPLOYMENT criteria must be met?" (free text)
-Example: "Feature deployed to staging", "Feature flag configured", "No regressions in smoke test"
+**Q1 — Code quality:**
+Suggest based on architecture docs: e.g., "Code reviewed. No linting errors. Follows naming conventions from [architecture doc]."
+**"Adjust code quality criteria?"** (free text or "Looks good")
 
-**Q5:** "What PRODUCT criteria must be met?" (free text)
-Example: "All acceptance criteria checked", "PO or stakeholder has verified the feature", "Design matches spec"
+**Q2 — Testing:**
+Suggest based on testing strategy found: e.g., "Unit tests for business logic. Happy path and key failure cases covered. All tests pass."
+If no testing strategy found: ask "What testing is required before Done?" (free text)
+**"Adjust testing criteria?"** (free text or "Looks good")
 
-**Q6:** "Are there non-functional requirements that always apply?" (free text)
-Example: "Accessible (WCAG AA)", "Works on mobile", "Response time < 2s"
+**Q3 — Behavior visible to user:**
+Suggest based on ux_spec: e.g., "All acceptance criteria verified. Empty state shows correctly. Error state shows correct message. No broken UI states."
+**"Adjust behavior verification criteria?"** (free text or "Looks good")
+
+**Q4 — Deployment:**
+Suggest based on architecture: e.g., "Deployed to [staging/test environment]. No regressions in smoke test. Feature available for review."
+**"Adjust deployment criteria?"** (free text or "Looks good" or "Not applicable yet")
+
+**Q5 — Documentation:**
+Suggest: "If a business rule, architecture decision, or UX flow changed: canonical doc updated. If a new decision was made: logged in decision_docs."
+**"Adjust documentation criteria?"** (free text or "Looks good")
+
+**Q6 — Non-functional:**
+Derive from PRD/principles/ux_spec: e.g., "Accessible on [platform]. Works at [stated performance target]. No console errors."
+**"Any additional non-functional requirements?"** (free text or "None")
+
+**Q7 — Product verification:**
+**"Who verifies the increment and when? (e.g., 'PO verifies before sprint review')"** (free text)
+
+---
 
 ## Document Generation
 
@@ -47,44 +76,54 @@ Example: "Accessible (WCAG AA)", "Works on mobile", "Response time < 2s"
 
 ## Purpose
 
-A story is Done only when ALL of the following are true. Partial completion is not Done.
+An increment is Done when ALL criteria below are true. This applies to every story and to the sprint as a whole.
+Partial completion is not Done. Stories that don't meet DoD return to backlog.
 
 ## Criteria
 
-### Code
-- [ ] [Q1 criterion 1]
-- [ ] [Q1 criterion 2]
+### Code Quality
+- [ ] [Q1 criteria]
 
 ### Testing
-- [ ] [Q2 criterion 1]
-- [ ] [Q2 criterion 2]
+- [ ] [Q2 criteria]
 
-### Documentation
-- [ ] [Q3 criterion 1]
+### Behavior (user-visible)
+- [ ] [Q3 criteria]
 
 ### Deployment
-- [ ] [Q4 criterion 1]
-- [ ] [Q4 criterion 2]
+- [ ] [Q4 criteria — or "Not applicable: [reason]"]
 
-### Product
-- [ ] [Q5 criterion 1]
-- [ ] [Q5 criterion 2]
+### Documentation
+- [ ] If business rule, architecture, or UX changed → canonical doc updated
+- [ ] If new decision made → logged in `06_decisions/`
+- [ ] [Q5 additional criteria]
 
-### Non-Functional (always applies)
-- [ ] [Q6 criterion 1]
+### Non-Functional
+- [ ] [Q6 criteria — or "None defined"]
 
-## When to Waive a Criterion
+## Verification
 
-A criterion can only be waived when:
-1. The reason is documented in the story
-2. A follow-up story is created immediately to address it
-3. The team explicitly agrees (not just one person)
+[Q7 — who verifies, when, in what context]
 
-## Ceremony
+## Waiving a Criterion
 
-DoD is reviewed at sprint review. Any story that doesn't meet all criteria is moved back to the backlog.
+A criterion may be waived when:
+1. Reason is documented in the story
+2. Follow-up story created immediately
+3. Explicit team agreement recorded in sprint plan
+
+## Connection to Docs
+
+[List of docs read — what informs each criterion]
 ```
 
 ## File Output
 
 Write to `05_scrum/definition_of_done.md`. Create folder if missing.
+
+## Quality Check Before Writing
+
+- Every criterion is verifiable — not "good quality" but "tests pass", "PO verified", "deployed to staging"
+- Behavior criteria reference specific states from ux_spec if it exists
+- Documentation criterion is explicit: canonical docs update when reality changes
+- Non-functional criteria derived from actual project constraints, not generic

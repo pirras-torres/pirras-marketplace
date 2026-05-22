@@ -1,38 +1,75 @@
 ---
 name: data-model
-description: Use when creating a Data Model document. Defines tables, fields, types, and relationships for the system's persistence layer. Writes to 02_business/.
+description: Use when creating a Data Model document. Derives entities from the domain model, then asks about storage details per entity. Writes to 02_business/.
 ---
 
 # Data Model
 
-Interview the user to define the persistence data model. Write to `02_business/data_model.md`.
+Define the persistence model. Derives entity list from domain model — doesn't ask again for what's known.
 
 ## Process
 
 ```
-Scan context → Storage type → Per entity: table, fields, types → Relationships → Indexes → Write
+Read domain model + business rules → Present entity list → Confirm which need storage
+→ Per entity: fields + types → Relationships → Conventions → Write
 ```
 
-## Step 0 — Scan context
+## Step 0 — Read existing docs (required)
 
-Read `02_business/domain_model.md` if exists. Extract entities and relationships. Use them as the starting point for tables.
+Read `02_business/domain_model.md`. Extract:
+- All entities with their attributes
+- All relationships
+- States if defined
 
-## Interview (one question at a time with AskUserQuestion)
+Read `02_business/business_rules.md` if exists. Extract:
+- Validation rules (these become field constraints)
+- State transition rules (these become state field options)
 
-**Q1:** "What type of storage will you use?" (AskUserQuestion options: Relational SQL / Document (NoSQL) / Both / Not decided yet)
+**If domain model doesn't exist:** tell user to run `kick-development:domain-model` first.
 
-**Q2:** "Which domain entities map to stored data? (Some entities may be transient — don't need storage)" (free text)
+Tell user:
+> "I found these entities in the domain model: [list]. I'll create a table for each. Some entities may be transient (no storage needed) — let me know which."
 
-For each entity the user confirms needs storage, ask:
+---
 
-**Q3:** "What are the fields for [Entity]? List name and type." (free text)
-Example: "id (UUID), amount (decimal), created_at (timestamp), account_id (UUID foreign key)"
+## Step 1 — Storage scope
 
-**Q4:** "What are the most common queries against [Entity]? (affects what indexes to define)" (free text)
+**Q1:** "Which entities from the domain model need persistent storage? Are any transient (calculated, in-memory only)?" (free text or "All need storage")
 
-**Q5:** "Are there any soft deletes? (logical deletion instead of physical)" (options: Yes — use deleted_at / No — physical delete / Mixed)
+Remove transient entities from the table list.
 
-**Q6:** "Any multi-tenancy? (is data isolated per user, organization, or shared?)" (options: Per user / Per organization / Shared / Not applicable)
+---
+
+## Step 2 — Storage technology
+
+**Q2:** "What type of storage?" (AskUserQuestion options: Relational SQL / Document NoSQL / Both / Not decided yet)
+
+---
+
+## Step 3 — Per entity: field details
+
+For each entity that needs storage, present what the domain model already defines (attributes) and ask for storage specifics:
+
+**Q3:** "For [Entity]: the domain model defines attributes [list]. What are the data types, constraints, and any additional fields not in the domain model?" (free text)
+
+Example guidance: "id (UUID, PK), amount (DECIMAL 10,2, NOT NULL, > 0), account_id (UUID, FK → accounts), created_at (TIMESTAMP, NOT NULL)"
+
+For each validation rule from business_rules.md that applies to this entity, pre-fill it as a constraint.
+
+**Q4:** "For [Entity]: what are the most common read queries? (affects indexes)" (free text)
+Example: "Find all transactions by account, ordered by date" → index on account_id + created_at
+
+---
+
+## Step 4 — Conventions
+
+**Q5:** "Soft deletes or physical deletes?" (AskUserQuestion options: Soft delete (deleted_at) / Physical delete / Mixed — depends on entity / Not decided)
+
+**Q6:** "Is data isolated per user, per organization, or shared?" (options: Per user / Per organization / Shared / Not applicable)
+
+**Q7:** "What is the primary key convention?" (options: UUID / Auto-increment integer / Other)
+
+---
 
 ## Document Generation
 
@@ -40,8 +77,17 @@ Example: "id (UUID), amount (decimal), created_at (timestamp), account_id (UUID 
 # Data Model
 
 **Project:** [name]
-**Storage:** [Q1]
+**Storage:** [Q2]
 **Date:** [today]
+**Source:** Derived from `02_business/domain_model.md`
+
+## Conventions
+
+- **Primary keys:** [Q7]
+- **Soft deletes:** [Q5]
+- **Tenancy:** [Q6]
+- **Timestamps:** all tables include `created_at`, `updated_at` (NOT NULL)
+[deleted_at if soft delete]
 
 ## Tables
 
@@ -49,14 +95,16 @@ Example: "id (UUID), amount (decimal), created_at (timestamp), account_id (UUID 
 
 | Field | Type | Constraints | Notes |
 |-------|------|-------------|-------|
-| id | UUID | PRIMARY KEY | |
-| [field] | [type] | [NOT NULL / FK / etc.] | [note] |
+| id | [type] | PRIMARY KEY | |
+| [field from domain model] | [type] | [from validation rules] | |
 | created_at | TIMESTAMP | NOT NULL | |
 | updated_at | TIMESTAMP | NOT NULL | |
 [| deleted_at | TIMESTAMP | NULLABLE | Soft delete |]
 
 **Indexes:**
-- [field] — reason: [Q4]
+- `[field(s)]` — reason: [from Q4 query pattern]
+
+**Domain model ref:** attributes match `02_business/domain_model.md#[Entity]`
 
 ---
 
@@ -64,19 +112,24 @@ Example: "id (UUID), amount (decimal), created_at (timestamp), account_id (UUID 
 
 ## Relationships
 
-| From | Relationship | To | Foreign key |
-|------|-------------|-----|------------|
+| From | Type | To | Foreign key |
+|------|------|----|-------------|
 | [table_a] | has many | [table_b] | table_b.table_a_id |
-| [...] | [...] | [...] | [...] |
 
-## Conventions
+## Validation Constraints (from business_rules.md)
 
-- [Soft delete strategy if applicable]
-- [Multi-tenancy strategy if applicable]
-- [ID type convention]
-- [Timestamp convention]
+| Table.Field | Constraint | Source rule |
+|------------|-----------|-------------|
+| [table.field] | CHECK (> 0) | [rule name] |
 ```
 
 ## File Output
 
 Write to `02_business/data_model.md`. Create folder if missing.
+
+## Quality Check Before Writing
+
+- Every entity in storage scope has a table
+- Every validation rule from business_rules.md has a corresponding constraint
+- Every field has explicit type and NOT NULL or NULLABLE
+- Indexes address the query patterns described
