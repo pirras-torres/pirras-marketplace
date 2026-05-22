@@ -18,13 +18,24 @@ Scan context → Platform + constraints → Information architecture
 → Navigation structure → Empty and error states → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Scan context
 
 Before asking anything:
-- Read `01_product/01_prd.md` → product name, target user, value proposition
-- Read `01_product/04_personas.md` → who the user is
-- Read `01_product/05_product_journey.md` → journey stages
-- Read `02_business/domain_model.md` → entities the user interacts with
+- Read `docs/01_product/01_prd.md` → product name, target user, value proposition
+- Read `docs/01_product/04_personas.md` → who the user is
+- Read `docs/01_product/05_product_journey.md` → journey stages
+- Read `docs/02_business/domain_model.md` → entities the user interacts with
 - Tell user what you found. Confirm it's current.
 
 ## Step 1 — Platform and scope
@@ -88,7 +99,7 @@ Examples: "Deleting an account requires confirming coverage of linked transactio
 **Date:** [today]
 
 > This document covers user experience only: flows, tasks, navigation, and interaction logic.
-> Visual design (colors, typography, components, spacing) is documented in `03_design/ui_spec.md`.
+> Visual design (colors, typography, components, spacing) is documented in `docs/03_design/ui_spec.md`.
 
 ## 1. Context
 
@@ -152,9 +163,9 @@ Examples: "Deleting an account requires confirming coverage of linked transactio
 
 ## File Output
 
-- Create `03_design/` if missing
-- Write to `03_design/ux_spec.md`
-- After writing, offer to create `03_design/ui_spec.md` using `kick-development:ui-spec`
+- Create `docs/03_design/` if missing
+- Write to `docs/03_design/ux_spec.md`
+- After writing, offer to create `docs/03_design/ui_spec.md` using `kick-development:ui-spec`
 
 ## Quality Check Before Writing
 

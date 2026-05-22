@@ -14,14 +14,25 @@ Read domain model + business rules → Present entity list → Confirm which nee
 → Per entity: fields + types → Relationships → Conventions → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Read existing docs (required)
 
-Read `02_business/domain_model.md`. Extract:
+Read `docs/02_business/domain_model.md`. Extract:
 - All entities with their attributes
 - All relationships
 - States if defined
 
-Read `02_business/business_rules.md` if exists. Extract:
+Read `docs/02_business/business_rules.md` if exists. Extract:
 - Validation rules (these become field constraints)
 - State transition rules (these become state field options)
 
@@ -79,7 +90,7 @@ Example: "Find all transactions by account, ordered by date" → index on accoun
 **Project:** [name]
 **Storage:** [Q2]
 **Date:** [today]
-**Source:** Derived from `02_business/domain_model.md`
+**Source:** Derived from `docs/02_business/domain_model.md`
 
 ## Conventions
 
@@ -104,7 +115,7 @@ Example: "Find all transactions by account, ordered by date" → index on accoun
 **Indexes:**
 - `[field(s)]` — reason: [from Q4 query pattern]
 
-**Domain model ref:** attributes match `02_business/domain_model.md#[Entity]`
+**Domain model ref:** attributes match `docs/02_business/domain_model.md#[Entity]`
 
 ---
 
@@ -125,7 +136,7 @@ Example: "Find all transactions by account, ordered by date" → index on accoun
 
 ## File Output
 
-Write to `02_business/data_model.md`. Create folder if missing.
+Write to `docs/02_business/data_model.md`. Create folder if missing.
 
 ## Quality Check Before Writing
 

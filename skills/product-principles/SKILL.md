@@ -5,7 +5,7 @@ description: Use when creating Product Principles for a software project. Define
 
 # Product Principles
 
-Interview the user to define the product's guiding principles. Write to `01_product/03_product_principles.md`.
+Interview the user to define the product's guiding principles. Write to `docs/01_product/03_product_principles.md`.
 
 ## What Are Product Principles
 
@@ -21,9 +21,20 @@ Good: "Clarity over completeness — show less if it means the user understands 
 Scan context → 3 trade-off scenarios → 4 anchoring questions → Derive principles → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Scan context
 
-Read `01_product/01_prd.md` if exists. Extract product vision and value proposition. Use it to make questions specific to this product, not generic.
+Read `docs/01_product/01_prd.md` if exists. Extract product vision and value proposition. Use it to make questions specific to this product, not generic.
 
 ## Interview (one question at a time with AskUserQuestion)
 
@@ -81,7 +92,7 @@ When facing a trade-off, check which principle applies. If two principles confli
 
 ## File Output
 
-Write to `01_product/03_product_principles.md`. Create folder if missing.
+Write to `docs/01_product/03_product_principles.md`. Create folder if missing.
 
 ## Quality Check Before Writing
 

@@ -14,9 +14,20 @@ Read PRD → Present existing success indicators → Time horizon → Refine goa
 → Metrics → Minimum acceptable outcome → Risks → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Read PRD
 
-Read `01_product/01_prd.md`. Extract:
+Read `docs/01_product/01_prd.md`. Extract:
 - Product name
 - Product promise
 - Success indicators (section 7)
@@ -108,12 +119,12 @@ By [Q1], [Q2 — full goal statement].
 
 ## Source
 
-Derived from PRD success indicators: `01_product/01_prd.md#7-success-indicators`
+Derived from PRD success indicators: `docs/01_product/01_prd.md#7-success-indicators`
 ```
 
 ## File Output
 
-Write to `01_product/02_product_goal.md`. Create folder if missing.
+Write to `docs/01_product/02_product_goal.md`. Create folder if missing.
 
 ## Quality Check Before Writing
 

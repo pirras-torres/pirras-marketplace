@@ -17,11 +17,22 @@ Scan context → Design language → Color system → Typography → Spacing
 → Component inventory → Per component: states + specs → Tokens → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Scan context
 
 Before asking anything:
-- Read `03_design/ux_spec.md` if exists → extract sections and flow names (informs component needs)
-- Read `01_product/03_product_principles.md` if exists → visual personality clues
+- Read `docs/03_design/ux_spec.md` if exists → extract sections and flow names (informs component needs)
+- Read `docs/01_product/03_product_principles.md` if exists → visual personality clues
 - Tell user what you found.
 
 ## Step 1 — Design language
@@ -97,7 +108,7 @@ Example: "Lucide Icons", "Custom SVGs", "SF Symbols (iOS only)"
 **Date:** [today]
 
 > This document covers interface design only: components, visual styles, and design tokens.
-> User flows, navigation logic, and interaction rules are in `03_design/ux_spec.md`.
+> User flows, navigation logic, and interaction rules are in `docs/03_design/ux_spec.md`.
 
 ## 1. Design Language
 
@@ -177,9 +188,9 @@ Example: "Lucide Icons", "Custom SVGs", "SF Symbols (iOS only)"
 
 ## File Output
 
-- Create `03_design/` if missing
-- Write to `03_design/ui_spec.md`
-- After writing, ask if user wants to create `03_design/prototype_docs.md` using `kick-development:prototype-docs`
+- Create `docs/03_design/` if missing
+- Write to `docs/03_design/ui_spec.md`
+- After writing, ask if user wants to create `docs/03_design/prototype_docs.md` using `kick-development:prototype-docs`
 
 ## Quality Check Before Writing
 

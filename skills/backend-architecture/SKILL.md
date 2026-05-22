@@ -16,19 +16,30 @@ Scan all docs → Identify relevant decision areas → Interview on those areas 
 → Generate doc with sections appropriate to this project → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Deep context scan
 
 Read ALL of the following that exist:
 
 | Document | What to extract |
 |----------|----------------|
-| `01_product/01_prd.md` | Scale hints, user type, offline needs, performance expectations |
-| `01_product/03_product_principles.md` | Technical implications of each principle |
-| `02_business/domain_model.md` | Entities, subdomains, invariants — shapes API structure |
-| `02_business/business_rules.md` | Rules that must be enforced server-side |
-| `02_business/data_model.md` | Tables, relationships, query patterns |
-| `03_design/ux_spec.md` | Flows that need API support, real-time needs, offline flows |
-| `05_scrum/discovery/S*.md` | Slice scopes — what backend work is coming first |
+| `docs/01_product/01_prd.md` | Scale hints, user type, offline needs, performance expectations |
+| `docs/01_product/03_product_principles.md` | Technical implications of each principle |
+| `docs/02_business/domain_model.md` | Entities, subdomains, invariants — shapes API structure |
+| `docs/02_business/business_rules.md` | Rules that must be enforced server-side |
+| `docs/02_business/data_model.md` | Tables, relationships, query patterns |
+| `docs/03_design/ux_spec.md` | Flows that need API support, real-time needs, offline flows |
+| `docs/05_scrum/discovery/S*.md` | Slice scopes — what backend work is coming first |
 
 After reading, tell the user:
 > "I found [list of docs]. Based on these, the decisions that matter most for this project's backend are: [list decisions you identified]. I'll focus the interview on these."
@@ -158,4 +169,4 @@ Generate sections based on what was actually discussed. Do not include empty sec
 
 ## File Output
 
-Write to `04_tech/backend_architecture.md`. Create folder if missing.
+Write to `docs/04_tech/backend_architecture.md`. Create folder if missing.

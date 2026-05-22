@@ -15,19 +15,30 @@ A story is Ready when the team has enough to start it, complete it in a sprint, 
 Scan docs → Derive suggested criteria per category → User confirms/adjusts → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Deep scan
 
 Read ALL of the following that exist:
 
 | Doc | What to extract |
 |-----|----------------|
-| `01_product/01_prd.md` | Product scope — any features that need special DoR? |
-| `01_product/03_product_principles.md` | Quality standards that apply before sprint entry |
-| `02_business/domain_model.md` | Complex entities that need UX/data design before coding |
-| `02_business/business_rules.md` | Rules that require architecture decision before implementing |
-| `03_design/ux_spec.md` | Which flows/screens need UX documented before sprint |
-| `04_tech/backend_architecture.md` | API contract requirements, auth decisions needed per story |
-| `04_tech/frontend_architecture.md` | Testing framework, component patterns needed before sprint |
+| `docs/01_product/01_prd.md` | Product scope — any features that need special DoR? |
+| `docs/01_product/03_product_principles.md` | Quality standards that apply before sprint entry |
+| `docs/02_business/domain_model.md` | Complex entities that need UX/data design before coding |
+| `docs/02_business/business_rules.md` | Rules that require architecture decision before implementing |
+| `docs/03_design/ux_spec.md` | Which flows/screens need UX documented before sprint |
+| `docs/04_tech/backend_architecture.md` | API contract requirements, auth decisions needed per story |
+| `docs/04_tech/frontend_architecture.md` | Testing framework, component patterns needed before sprint |
 
 After reading, derive suggested criteria per category. Tell user:
 > "Based on your docs, I'm suggesting these DoR criteria. Review each category and adjust."
@@ -111,7 +122,7 @@ These criteria reference:
 
 ## File Output
 
-Write to `05_scrum/definition_of_ready.md`. Create folder if missing.
+Write to `docs/05_scrum/definition_of_ready.md`. Create folder if missing.
 
 ## Quality Check Before Writing
 

@@ -14,18 +14,29 @@ Scan docs → Derive risk candidates → User confirms + adds → Rate each risk
 → Mitigation per risk → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Scan for risk candidates
 
 Read ALL of the following that exist and extract risk candidates:
 
 | Doc | Risk signals |
 |-----|-------------|
-| `04_tech/backend_architecture.md` | Open decisions → technical risks |
-| `04_tech/frontend_architecture.md` | Open decisions → technical risks |
-| `02_business/domain_model.md` | Complex invariants → implementation risk |
-| `05_scrum/discovery/S*.md` | Pending / blocking items → delivery risks |
-| `01_product/01_prd.md` | Out-of-scope assumptions → product risks |
-| `01_product/04_personas.md` | Churn triggers → product risks |
+| `docs/04_tech/backend_architecture.md` | Open decisions → technical risks |
+| `docs/04_tech/frontend_architecture.md` | Open decisions → technical risks |
+| `docs/02_business/domain_model.md` | Complex invariants → implementation risk |
+| `docs/05_scrum/discovery/S*.md` | Pending / blocking items → delivery risks |
+| `docs/01_product/01_prd.md` | Out-of-scope assumptions → product risks |
+| `docs/01_product/04_personas.md` | Churn triggers → product risks |
 
 Present derived risk candidates:
 > "Based on your docs, I identified these potential risks: [list with source]. Confirm which are real risks, and add any I missed."
@@ -114,7 +125,7 @@ Score: H×H=Critical, H×M or M×H=High, M×M=Medium, L×L=Negligible
 
 ## File Output
 
-Write to `06_decisions/risk_docs.md`. Create folder if missing.
+Write to `docs/06_decisions/risk_docs.md`. Create folder if missing.
 
 ## Quality Check Before Writing
 

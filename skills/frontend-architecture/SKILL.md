@@ -16,20 +16,31 @@ Scan all docs → Identify relevant decision areas → Interview on those areas 
 → Generate doc with sections appropriate to this project → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Deep context scan
 
 Read ALL of the following that exist:
 
 | Document | What to extract |
 |----------|----------------|
-| `01_product/01_prd.md` | Platform hints, user type, offline needs, performance expectations |
-| `01_product/03_product_principles.md` | Technical implications for UI/UX tradeoffs |
-| `02_business/domain_model.md` | Entities the UI must represent, state complexity |
-| `02_business/business_rules.md` | Rules the frontend must enforce or communicate |
-| `03_design/ux_spec.md` | Screens, flows, navigation model, interaction rules |
-| `03_design/ui_spec.md` | Design system, component library, styling approach |
-| `04_tech/backend_architecture.md` | API style, auth method — shapes data fetching |
-| `05_scrum/discovery/S*.md` | First slice scope — what frontend must deliver first |
+| `docs/01_product/01_prd.md` | Platform hints, user type, offline needs, performance expectations |
+| `docs/01_product/03_product_principles.md` | Technical implications for UI/UX tradeoffs |
+| `docs/02_business/domain_model.md` | Entities the UI must represent, state complexity |
+| `docs/02_business/business_rules.md` | Rules the frontend must enforce or communicate |
+| `docs/03_design/ux_spec.md` | Screens, flows, navigation model, interaction rules |
+| `docs/03_design/ui_spec.md` | Design system, component library, styling approach |
+| `docs/04_tech/backend_architecture.md` | API style, auth method — shapes data fetching |
+| `docs/05_scrum/discovery/S*.md` | First slice scope — what frontend must deliver first |
 
 After reading, tell the user:
 > "I found [list of docs]. Based on these, the decisions that matter most for this project's frontend are: [list decisions identified]. I'll focus the interview on these."
@@ -180,4 +191,4 @@ src/
 
 ## File Output
 
-Write to `04_tech/frontend_architecture.md`. Create folder if missing.
+Write to `docs/04_tech/frontend_architecture.md`. Create folder if missing.

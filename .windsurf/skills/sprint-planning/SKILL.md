@@ -8,8 +8,8 @@ description: Use when planning a sprint. Reads the backlog for the active slice,
 Select stories from the active slice backlog, verify they meet DoR, define Sprint Goal, and write the sprint plan.
 
 **Requires:**
-- `docs/05_scrum/backlog.md` with at least one slice section
-- `docs/05_scrum/definition_of_ready.md`
+- `05_scrum/backlog.md` with at least one slice section
+- `05_scrum/definition_of_ready.md`
 - Active slice in `project_memory.md` (or user confirms which slice)
 
 ## Process
@@ -21,28 +21,17 @@ Read memory → Read DoR → Read backlog → DoR check per story
 
 ---
 
-## Detect docs folder
-
-Run:
-```bash
-find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
-```
-
-- **1 result:** use that path as docs root (e.g., `./docs`)
-- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
-- **No result:** use `docs/` and create it if missing
-
 ## Step 0 — Read context
 
 Read in this order:
 
 1. `project_memory.md` → get active slice (S#), last sprint number
-2. `docs/05_scrum/definition_of_ready.md` → extract all DoR criteria
-3. `docs/05_scrum/backlog.md` → extract stories for the active slice
-4. `docs/01_product/02_product_goal.md` if exists → Sprint Goal should advance Product Goal
+2. `05_scrum/definition_of_ready.md` → extract all DoR criteria
+3. `05_scrum/backlog.md` → extract stories for the active slice
+4. `01_product/02_product_goal.md` if exists → Sprint Goal should advance Product Goal
 
-**If no backlog:** Stop. Tell user to run `kick-development:backlog` first (expects `docs/05_scrum/backlog.md`).  
-**If no DoR:** Stop. Tell user to run `kick-development:definition-of-ready` first (expects `docs/05_scrum/definition_of_ready.md`).
+**If no backlog:** Stop. Tell user to run `kick-development:backlog` first.  
+**If no DoR:** Stop. Tell user to run `kick-development:definition-of-ready` first.
 
 Calculate next sprint number: if memory says last sprint was N, this is N+1. If no sprint history, this is Sprint 1.
 
@@ -104,7 +93,7 @@ Present selected stories to user:
 
 ## Document Generation
 
-File: `docs/05_scrum/sprints/sprint-[N].md`
+File: `05_scrum/sprints/sprint-[N].md`
 
 ```markdown
 # Sprint [N]
@@ -140,18 +129,18 @@ File: `docs/05_scrum/sprints/sprint-[N].md`
 
 ## Links
 
-- Slice discovery: `docs/05_scrum/discovery/S[#].md`
-- Backlog: `docs/05_scrum/backlog.md`
-- DoR: `docs/05_scrum/definition_of_ready.md`
-- DoD: `docs/05_scrum/definition_of_done.md`
+- Slice discovery: `05_scrum/discovery/S[#].md`
+- Backlog: `05_scrum/backlog.md`
+- DoR: `05_scrum/definition_of_ready.md`
+- DoD: `05_scrum/definition_of_done.md`
 ```
 
 ---
 
 ## File Output
 
-- Create `docs/05_scrum/sprints/` if missing
-- Write to `docs/05_scrum/sprints/sprint-[N].md`
+- Create `05_scrum/sprints/` if missing
+- Write to `05_scrum/sprints/sprint-[N].md`
 - Update `project_memory.md`: set Sprint to "Sprint N — In Progress", update Active Slice, update Last Action
 
 ---

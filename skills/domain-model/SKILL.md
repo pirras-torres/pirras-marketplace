@@ -5,7 +5,7 @@ description: Use when creating the domain model document for a software project.
 
 # Domain Model
 
-Interview the user to define the domain language, entities, relationships, and subdomains. Write results to `02_business/domain_model.md`.
+Interview the user to define the domain language, entities, relationships, and subdomains. Write results to `docs/02_business/domain_model.md`.
 
 ## Process
 
@@ -14,10 +14,21 @@ Scan context → Domain context → Ubiquitous language → Entities → Relatio
 → Subdomains → Business rules summary → Generate doc → Write to disk
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Scan context
 
 Before asking anything:
-- Read `01_product/01_prd.md` if it exists. Extract: product name, problem description, and target user.
+- Read `docs/01_product/01_prd.md` if it exists. Extract: product name, problem description, and target user.
 - If PRD exists, tell the user: "I found the PRD for [product name]. I'll use it as context."
 - If no PRD exists, ask for a brief description of what the software does (free text, 2-3 sentences).
 
@@ -76,7 +87,7 @@ List 3-10 invariants. These become the foundation for the business rules documen
 
 ## Document Generation
 
-Generate `02_business/domain_model.md`:
+Generate `docs/02_business/domain_model.md`:
 
 ```markdown
 # Domain Model
@@ -92,7 +103,7 @@ Generate `02_business/domain_model.md`:
 **What this domain does NOT do:** [Q2]
 
 **Source documents:**
-- [Link to PRD if exists]
+- [Link to `docs/01_product/01_prd.md` if exists]
 
 ## 2. Domain Context
 
@@ -144,9 +155,9 @@ States: [if applicable]
 
 ## File Output
 
-- Create `02_business/` folder if missing
-- Write to `02_business/domain_model.md`
-- After writing, offer to also create `02_business/business_rules.md` with expanded rules using `kick-development:business-rules`
+- Create `docs/02_business/` folder if missing
+- Write to `docs/02_business/domain_model.md`
+- After writing, offer to also create `docs/02_business/business_rules.md` with expanded rules using `kick-development:business-rules`
 
 ## Quality Check Before Writing
 

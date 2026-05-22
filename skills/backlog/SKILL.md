@@ -7,7 +7,7 @@ description: Use when creating backlog items (PBIs) for a software project. Requ
 
 Generate PBIs (Product Backlog Items) from completed slice discovery documents. Each story is traceable to a slice.
 
-**Requires:** At least one `05_scrum/discovery/S#.md` file.  
+**Requires:** At least one `docs/05_scrum/discovery/S#.md` file.  
 **Does not generate:** epics invented from thin air, stories without slice traceability, estimates without scope.
 
 ## Process
@@ -17,19 +17,30 @@ Scan slices → Select slices to backlog → Per slice: generate stories
 → User reviews + adjusts → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Scan slices (required)
 
 Run:
 ```bash
-find 05_scrum/discovery -name "S*.md" | sort
+find docs/05_scrum/discovery -name "S*.md" | sort
 ```
 
 Also read:
-- `01_product/04_personas.md` → for "As a [persona]" format
-- `05_scrum/definition_of_ready.md` → if exists, use its AC format
+- `docs/01_product/04_personas.md` → for "As a [persona]" format
+- `docs/05_scrum/definition_of_ready.md` → if exists, use its AC format
 
 **If no slice files found:**
-> "No slice discovery documents found in 05_scrum/discovery/. Backlog requires at least one completed slice. Run kick-development:slices-discovery first."
+> "No slice discovery documents found in docs/05_scrum/discovery/. Backlog requires at least one completed slice. Run kick-development:slices-discovery first."
 
 Stop and offer to invoke `kick-development:slices-discovery`.
 
@@ -103,7 +114,7 @@ Options: MoSCoW / Slice order (S1 before S2) / Business value first / As generat
 
 ## S[N]: [Slice name]
 
-> Derived from: `05_scrum/discovery/S[N].md`
+> Derived from: `docs/05_scrum/discovery/S[N].md`
 
 ### Story [N].1: [Short title]
 
@@ -136,5 +147,5 @@ Options: MoSCoW / Slice order (S1 before S2) / Business value first / As generat
 
 ## File Output
 
-Write to `05_scrum/backlog.md`. Create folder if missing.  
+Write to `docs/05_scrum/backlog.md`. Create folder if missing.  
 If file exists, ask: "Overwrite or append new slices?"

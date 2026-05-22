@@ -5,7 +5,7 @@ description: Use when creating user personas for a software project. Defines who
 
 # Personas
 
-Interview the user to define 1-3 product personas. Write to `01_product/04_personas.md`.
+Interview the user to define 1-3 product personas. Write to `docs/01_product/04_personas.md`.
 
 ## Process
 
@@ -14,9 +14,20 @@ Scan context → Number of personas → Persona 1 questions → Persona 2 questi
 → Persona 3 questions (if needed) → Synthesis → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Scan context
 
-Read `01_product/01_prd.md` if exists. Extract: target user description, non-user definition, pain points already described. Tell user what you found and use it to make questions specific.
+Read `docs/01_product/01_prd.md` if exists. Extract: target user description, non-user definition, pain points already described. Tell user what you found and use it to make questions specific.
 
 ## Step 1 — Number of personas
 
@@ -108,7 +119,7 @@ Read `01_product/01_prd.md` if exists. Extract: target user description, non-use
 
 ## File Output
 
-Write to `01_product/04_personas.md`. Create folder if missing.
+Write to `docs/01_product/04_personas.md`. Create folder if missing.
 
 ## Quality Check Before Writing
 

@@ -1,34 +1,80 @@
 ---
 name: product-goal
-description: Use when creating a Product Goal document. Defines the measurable outcome the product aims to achieve in a specific time horizon. Writes to 01_product/.
+description: Use when creating a Product Goal document. Reads existing PRD success indicators as a starting point, then refines with time horizon and specific metrics. Writes to 01_product/.
 ---
 
 # Product Goal
 
-Interview the user to define the product's measurable goal. Write to `01_product/02_product_goal.md`.
+Define the measurable outcome the product aims to achieve. Starts from PRD success indicators — refines them into a time-bound goal with specific metrics.
 
 ## Process
 
 ```
-Scan context → Time horizon → Goal statement → Key metrics → Validation criteria → Write
+Read PRD → Present existing success indicators → Time horizon → Refine goal statement
+→ Metrics → Minimum acceptable outcome → Risks → Write
 ```
 
-## Step 0 — Scan context
+## Step 0 — Read PRD
 
-Read `01_product/01_prd.md` if exists. Extract product name and success indicators. Tell user what you found.
+Read `01_product/01_prd.md`. Extract:
+- Product name
+- Product promise
+- Success indicators (section 7)
+- Target user
 
-## Interview (one question at a time with AskUserQuestion)
+Tell user:
+> "I found the PRD for [product name]. Success indicators already defined: [list]. I'll use these as the basis for the Product Goal."
 
-**Q1:** "What time horizon is this goal for?" (options: 3 months / 6 months / 1 year / Other)
+If no PRD exists: ask for brief product description and intended success (2-3 sentences) before continuing.
 
-**Q2:** "Complete this: 'By [time horizon], the product achieves [measurable outcome] for [user type].'" (free text)
+---
 
-**Q3:** "How will you measure if this goal is achieved? List 2-4 specific metrics with numbers." (free text)
-Example: "70% of users open the app at least 3x per week after 30 days", "NPS > 40 at 3 months"
+## Step 1 — Time horizon
 
-**Q4:** "What is the minimum acceptable outcome? (what would still count as success even if the full goal isn't met)" (free text)
+**Q1:** "What time horizon is this Product Goal for?" (AskUserQuestion options: 3 months / 6 months / 1 year / Other)
 
-**Q5:** "What would make this goal fail? (top 2-3 risks)" (free text)
+---
+
+## Step 2 — Goal statement
+
+**Q2:** "Complete: 'By [time horizon], [product name] achieves [measurable outcome] for [user].'" (free text)
+
+The goal statement must name:
+- A specific user type (from personas or PRD)
+- A measurable outcome (not "users love it")
+- A time horizon
+
+If the PRD success indicators suggest a goal, propose one: "Based on the PRD, a possible goal is: [derived statement]. Use this or write your own."
+
+---
+
+## Step 3 — Success metrics
+
+Present existing PRD success indicators and ask to refine:
+
+**Q3:** "The PRD defines these success indicators: [list]. Convert them into specific metrics with numbers and measurement methods." (free text)
+Example: "70% of users open the app 3+ times/week after 30 days, measured via app events"
+
+Require at least 2 metrics. Each metric needs:
+- What is measured
+- Target value
+- How it's measured
+
+---
+
+## Step 4 — Minimum acceptable outcome
+
+**Q4:** "What is the minimum acceptable outcome? What would still count as success even if the full goal isn't met?" (free text)
+
+This is the floor, not the ceiling.
+
+---
+
+## Step 5 — Goal risks
+
+**Q5:** "What are the top 2-3 risks that could prevent reaching this goal?" (free text)
+
+---
 
 ## Document Generation
 
@@ -45,21 +91,33 @@ By [Q1], [Q2 — full goal statement].
 
 ## Success Metrics
 
-| Metric | Target | Measurement method |
-|--------|--------|-------------------|
-| [metric 1] | [target] | [how measured] |
-| [metric 2] | [target] | [how measured] |
+| Metric | Target | How measured |
+|--------|--------|--------------|
+| [metric 1] | [target] | [method] |
+| [metric 2] | [target] | [method] |
 
 ## Minimum Acceptable Outcome
 
-[Q4]
+[Q4 — the floor for success]
 
-## Risk to Goal
+## Risks to Goal
 
 1. [Q5 risk 1]
 2. [Q5 risk 2]
+[3. Q5 risk 3 if provided]
+
+## Source
+
+Derived from PRD success indicators: `01_product/01_prd.md#7-success-indicators`
 ```
 
 ## File Output
 
 Write to `01_product/02_product_goal.md`. Create folder if missing.
+
+## Quality Check Before Writing
+
+- Goal statement names user, outcome, and time horizon
+- Every metric has a target number and measurement method
+- Minimum acceptable outcome is lower than the full goal (not the same)
+- Risks are specific to this product and goal (not generic)

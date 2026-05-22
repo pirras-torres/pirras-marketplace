@@ -14,9 +14,20 @@ Read domain model → Present known invariants → Expand per subdomain
 → Validation rules → State transitions → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Read domain model (required)
 
-Read `02_business/domain_model.md`. Extract:
+Read `docs/02_business/domain_model.md`. Extract:
 - All invariants from section 6
 - All subdomains with their responsibilities
 - Entities and their states (if defined)
@@ -77,7 +88,7 @@ This determines which rules need client-side validation vs. server-only enforcem
 
 **Project:** [name]
 **Date:** [today]
-**Source:** Derived from `02_business/domain_model.md` + additional rules
+**Source:** Derived from `docs/02_business/domain_model.md` + additional rules
 
 ## 1. Critical Rules (must never be violated)
 
@@ -124,7 +135,7 @@ These rules, if broken, corrupt data or destroy user trust. Enforced at all laye
 
 ## File Output
 
-Write to `02_business/business_rules.md`. Create folder if missing.
+Write to `docs/02_business/business_rules.md`. Create folder if missing.
 
 ## Quality Check Before Writing
 

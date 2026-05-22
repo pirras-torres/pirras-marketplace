@@ -1,11 +1,11 @@
 ---
 name: decision-docs
-description: Use when documenting an architectural or product decision. Creates an Architecture Decision Record (ADR) capturing context, options, and rationale. Writes to 06_decisions/.
+description: Use when documenting an architectural or product decision. Creates an Architecture Decision Record (ADR) capturing context, options, and rationale. Writes to docs/06_decisions/.
 ---
 
 # Decision Documentation (ADR)
 
-Interview the user to document one decision using Architecture Decision Record format. Write to `06_decisions/`.
+Interview the user to document one decision using Architecture Decision Record format. Write to `docs/06_decisions/`.
 
 ## What Is an ADR
 
@@ -16,6 +16,17 @@ An ADR captures: the context (why a decision was needed), the options considered
 ```
 One decision per ADR → Context → Options → Decision → Consequences → Write
 ```
+
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
 
 ## Interview (one question at a time with AskUserQuestion)
 
@@ -37,7 +48,7 @@ For each option, ask: "What are the pros and cons of [option]?" (free text)
 
 ## Document Generation
 
-ADR file name: `06_decisions/adr-[number]-[short-slug].md`
+ADR file name: `docs/06_decisions/adr-[number]-[short-slug].md`
 Number increments from existing ADRs in folder.
 
 ```markdown
@@ -81,8 +92,8 @@ Number increments from existing ADRs in folder.
 
 ## File Output
 
-- Check how many ADRs already exist in `06_decisions/` with `find 06_decisions -name "adr-*.md" | wc -l`
-- Name file `06_decisions/adr-[N+1]-[slug].md`
+- Check how many ADRs already exist in `docs/06_decisions/` with `find docs/06_decisions -name "adr-*.md" | wc -l`
+- Name file `docs/06_decisions/adr-[N+1]-[slug].md`
 - Create folder if missing
 - After writing, ask if there are more decisions to document
 

@@ -5,7 +5,7 @@ description: Use when doing slice discovery before creating backlog items. Answe
 
 # Slice Discovery
 
-Document ONE slice per run. Each slice gets its own file: `05_scrum/discovery/S1.md`, `S2.md`, etc.
+Document ONE slice per run. Each slice gets its own file: `docs/05_scrum/discovery/S1.md`, `S2.md`, etc.
 
 **Discovery answers:** what the slice covers, why it matters, what rules/data/UX/tech are affected, what is decided vs assumed vs pending.  
 **Discovery does NOT produce:** PBI lists, acceptance criteria for individual stories, estimates, sprint assignments, or final API contracts.
@@ -38,16 +38,27 @@ Scan context → Select slice → Traceability → Scope → Business rules + da
 → Sufficiency check → Write → Promotion rule
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Scan context
 
 Read the following and tell the user what you found:
-- `01_product/01_prd.md` → problem, scope
-- `01_product/02_product_goal.md` → expected outcomes
-- `01_product/05_product_journey.md` → journey stages (use as map, not sequence)
-- `02_business/domain_model.md` → entities and rules
-- `05_scrum/backlog.md` → existing slices already discovered (to assign correct S# number)
+- `docs/01_product/01_prd.md` → problem, scope
+- `docs/01_product/02_product_goal.md` → expected outcomes
+- `docs/01_product/05_product_journey.md` → journey stages (use as map, not sequence)
+- `docs/02_business/domain_model.md` → entities and rules
+- `docs/05_scrum/backlog.md` → existing slices already discovered (to assign correct S# number)
 
-Count existing `05_scrum/discovery/S*.md` files to determine the next ID.
+Count existing `docs/05_scrum/discovery/S*.md` files to determine the next ID.
 
 ## Step 1 — Slice selection
 
@@ -121,7 +132,7 @@ If any check fails, ask the missing question before writing.
 
 ## Document Generation
 
-File: `05_scrum/discovery/S[N].md` where N = next available number.
+File: `docs/05_scrum/discovery/S[N].md` where N = next available number.
 
 ```markdown
 # S[N]: [Human name of slice]
@@ -151,19 +162,19 @@ File: `05_scrum/discovery/S[N].md` where N = next available number.
 
 [Q6 — rules activated. "None" if not applicable]
 
-Links: [reference to 02_business/business_rules.md sections if applicable]
+Links: [reference to `docs/02_business/business_rules.md` sections if applicable]
 
 ## Data
 
 [Q7 — entities read/written, new fields required]
 
-Links: [reference to 02_business/data_model.md if applicable]
+Links: [reference to `docs/02_business/data_model.md` if applicable]
 
 ## UX
 
 [Q8 — flows and screens involved]
 
-Links: [reference to 03_design/ux_spec.md if applicable]
+Links: [reference to `docs/03_design/ux_spec.md` if applicable]
 
 ## Frontend
 
@@ -206,8 +217,8 @@ This discovery is sufficient to create verifiable PBIs when:
 
 ## File Output
 
-- Create `05_scrum/discovery/` if missing
-- Write to `05_scrum/discovery/S[N].md`
+- Create `docs/05_scrum/discovery/` if missing
+- Write to `docs/05_scrum/discovery/S[N].md`
 - After writing: apply the **Promotion Rule**
 
 ## Promotion Rule

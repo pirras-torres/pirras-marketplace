@@ -8,8 +8,8 @@ description: Use when closing a sprint. Checks stories against Definition of Don
 Close a sprint, verify Done criteria, identify doc updates needed, capture learnings, and determine next step.
 
 **Requires:**
-- `docs/05_scrum/sprints/sprint-[N].md` (the active sprint plan)
-- `docs/05_scrum/definition_of_done.md`
+- `05_scrum/sprints/sprint-[N].md` (the active sprint plan)
+- `05_scrum/definition_of_done.md`
 
 ## Process
 
@@ -20,23 +20,12 @@ Read sprint + DoD → Per story: Done check → Identify doc updates
 
 ---
 
-## Detect docs folder
-
-Run:
-```bash
-find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
-```
-
-- **1 result:** use that path as docs root (e.g., `./docs`)
-- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
-- **No result:** use `docs/` and create it if missing
-
 ## Step 0 — Read context
 
 1. `project_memory.md` → current sprint N, active slice S#
-2. `docs/05_scrum/sprints/sprint-[N].md` → sprint backlog and Sprint Goal
-3. `docs/05_scrum/definition_of_done.md` → all DoD criteria
-4. `docs/05_scrum/discovery/S[#].md` → slice sufficiency criteria (was the slice goal met?)
+2. `05_scrum/sprints/sprint-[N].md` → sprint backlog and Sprint Goal
+3. `05_scrum/definition_of_done.md` → all DoD criteria
+4. `05_scrum/discovery/S[#].md` → slice sufficiency criteria (was the slice goal met?)
 
 Tell user: "Reviewing Sprint [N] for slice S[#]. Sprint Goal: [goal]. [X] stories in sprint."
 
@@ -114,7 +103,7 @@ Options:
 
 ## Document Updates
 
-**Update sprint file** `docs/05_scrum/sprints/sprint-[N].md`:
+**Update sprint file** `05_scrum/sprints/sprint-[N].md`:
 
 Add to the end:
 ```markdown

@@ -27,6 +27,17 @@ Foundation and Architecture happen once. The Slice Cycle repeats until the produ
 
 ---
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Load project memory
 
 Check if `project_memory.md` exists in the project root:
@@ -44,7 +55,7 @@ cat project_memory.md 2>/dev/null || echo "NO_MEMORY"
 
 Run:
 ```bash
-find . -type f -name "*.md" | grep -E "(0[1-9]_|discovery/S|sprints/sprint)" | sort
+find . -path "*/docs/*" -type f -name "*.md" | grep -E "(0[1-9]_|discovery/S|sprints/sprint)" | sort
 ```
 
 Cross-reference with memory. If memory says "Foundation complete" but PRD is missing, flag the discrepancy and correct memory.
@@ -55,9 +66,9 @@ Cross-reference with memory. If memory says "Foundation complete" but PRD is mis
 
 ### FOUNDATION phase
 **Condition:** Any of these missing:
-- `01_product/01_prd.md`
-- `02_business/domain_model.md`
-- `03_design/ux_spec.md`
+- `docs/01_product/01_prd.md`
+- `docs/02_business/domain_model.md`
+- `docs/03_design/ux_spec.md`
 
 **Action:** Show which foundation docs are missing. Suggest the next one in order.
 
@@ -72,10 +83,10 @@ Show user: "Foundation phase. Missing: [list]. Suggested next: [first missing]."
 
 ### ARCHITECTURE phase
 **Condition:** Foundation docs exist AND any of these missing:
-- `04_tech/backend_architecture.md`
-- `04_tech/frontend_architecture.md`
-- `05_scrum/definition_of_ready.md`
-- `05_scrum/definition_of_done.md`
+- `docs/04_tech/backend_architecture.md`
+- `docs/04_tech/frontend_architecture.md`
+- `docs/05_scrum/definition_of_ready.md`
+- `docs/05_scrum/definition_of_done.md`
 
 **Action:** Show which architecture/agreement docs are missing.
 
@@ -227,9 +238,9 @@ If a skill finds a conflict between a canonical doc and reality, guide enforces 
 
 | Trigger | Update |
 |---------|--------|
-| New business rule found in discovery | → update `business_rules.md` |
-| Architecture decision changed | → update `backend/frontend_architecture.md` + `decision_docs` |
-| UX flow changed during sprint | → update `ux_spec.md` |
+| New business rule found in discovery | → update `docs/02_business/business_rules.md` |
+| Architecture decision changed | → update `docs/04_tech/backend_architecture.md` / `docs/04_tech/frontend_architecture.md` + `docs/06_decisions/` |
+| UX flow changed during sprint | → update `docs/03_design/ux_spec.md` |
 | Slice complete with learnings | → update `project_memory.md` |
 
 Guide flags staleness but does not auto-update. Always asks user first.

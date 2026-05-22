@@ -5,7 +5,7 @@ description: Use when creating a Product Requirements Document (PRD) for a new o
 
 # Product Requirements Document (PRD)
 
-Interview the user section by section using AskUserQuestion. Write the resulting document to `01_product/01_prd.md`.
+Interview the user section by section using AskUserQuestion. Write the resulting document to `docs/01_product/01_prd.md`.
 
 ## Process
 
@@ -15,10 +15,21 @@ Scan context → Section 1: Problem → Section 2: Vision → Section 3: Identit
 → Section 7: Success Indicators → Generate doc → Write to disk
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Scan context
 
 Before asking anything:
-- Check if `01_product/01_prd.md` already exists. If yes, ask the user if they want to update or create new.
+- Check if `docs/01_product/01_prd.md` already exists. If yes, ask the user if they want to update or create new.
 - Look for any other context files in the project (README, CLAUDE.md, existing docs) to pre-fill answers you can infer. Tell the user what you found.
 
 ## Step 1 — Project basics
@@ -133,8 +144,8 @@ This product does not:
 
 ## File Output
 
-- Create folder `01_product/` if it doesn't exist
-- Write to `01_product/01_prd.md`
+- Create folder `docs/01_product/` if it doesn't exist
+- Write to `docs/01_product/01_prd.md`
 - After writing, show the user the file path and ask if they want to review or adjust any section
 
 ## Quality Check Before Writing

@@ -5,7 +5,7 @@ description: Use when creating a Product Journey document. Maps the user's exper
 
 # Product Journey
 
-Interview the user to map the full product experience. Write to `01_product/05_product_journey.md`.
+Interview the user to map the full product experience. Write to `docs/01_product/05_product_journey.md`.
 
 ## Process
 
@@ -13,9 +13,20 @@ Interview the user to map the full product experience. Write to `01_product/05_p
 Scan context → Journey stages → Per stage: user state, actions, system response, emotion → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Scan context
 
-Read personas and PRD if they exist. Extract: who the user is, what their goal is.
+Read `docs/` personas and PRD if they exist. Extract: who the user is, what their goal is.
 
 ## Interview (one question at a time with AskUserQuestion)
 
@@ -75,4 +86,4 @@ For each stage the user defines, ask:
 
 ## File Output
 
-Write to `01_product/05_product_journey.md`. Create folder if missing.
+Write to `docs/01_product/05_product_journey.md`. Create folder if missing.

@@ -15,19 +15,30 @@ DoD applies to every increment. A story is Done only when ALL criteria are met. 
 Scan docs → Derive suggested criteria → User confirms per category → Write
 ```
 
+## Detect docs folder
+
+Run:
+```bash
+find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
+```
+
+- **1 result:** use that path as docs root (e.g., `./docs`)
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **No result:** use `docs/` and create it if missing
+
 ## Step 0 — Deep scan
 
 Read ALL of the following that exist:
 
 | Doc | What to extract |
 |-----|----------------|
-| `01_product/02_product_goal.md` | Outcome criteria — what does "valuable increment" mean for this product? |
-| `01_product/03_product_principles.md` | Quality standards embedded in principles (e.g., "clarity over completeness" → UI must show clear state) |
-| `03_design/ux_spec.md` | UI states to verify: empty states, error states, interaction rules |
-| `03_design/ui_spec.md` | Visual correctness to verify: component usage, spacing, states |
-| `04_tech/backend_architecture.md` | Testing strategy, deployment pipeline, API standards |
-| `04_tech/frontend_architecture.md` | Testing framework, error handling patterns, accessibility |
-| `06_decisions/risk_docs.md` | Risk mitigations that must be verified before Done |
+| `docs/01_product/02_product_goal.md` | Outcome criteria — what does "valuable increment" mean for this product? |
+| `docs/01_product/03_product_principles.md` | Quality standards embedded in principles (e.g., "clarity over completeness" → UI must show clear state) |
+| `docs/03_design/ux_spec.md` | UI states to verify: empty states, error states, interaction rules |
+| `docs/03_design/ui_spec.md` | Visual correctness to verify: component usage, spacing, states |
+| `docs/04_tech/backend_architecture.md` | Testing strategy, deployment pipeline, API standards |
+| `docs/04_tech/frontend_architecture.md` | Testing framework, error handling patterns, accessibility |
+| `docs/06_decisions/risk_docs.md` | Risk mitigations that must be verified before Done |
 
 After reading, derive suggested criteria per category. Tell user:
 > "Based on your docs, I'm suggesting these DoD criteria. Review each and adjust."
@@ -95,7 +106,7 @@ Partial completion is not Done. Stories that don't meet DoD return to backlog.
 
 ### Documentation
 - [ ] If business rule, architecture, or UX changed → canonical doc updated
-- [ ] If new decision made → logged in `06_decisions/`
+- [ ] If new decision made → logged in `docs/06_decisions/`
 - [ ] [Q5 additional criteria]
 
 ### Non-Functional
@@ -119,7 +130,7 @@ A criterion may be waived when:
 
 ## File Output
 
-Write to `05_scrum/definition_of_done.md`. Create folder if missing.
+Write to `docs/05_scrum/definition_of_done.md`. Create folder if missing.
 
 ## Quality Check Before Writing
 
