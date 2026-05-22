@@ -38,7 +38,7 @@ Present a status table to the user. Mark each document ✅ (file exists) or ⬜ 
 | **Design** | Prototype Docs | ⬜/✅ | `kick-development:prototype-docs` |
 | **Tech** | Backend Architecture | ⬜/✅ | `kick-development:backend-architecture` |
 | **Tech** | Frontend Architecture | ⬜/✅ | `kick-development:frontend-architecture` |
-| **Tech** | Slices Discovery | ⬜/✅ | `kick-development:slices-discovery` |
+| **Scrum** | Slices Discovery | ⬜/✅ | `kick-development:slices-discovery` |
 | **Scrum** | Backlog | ⬜/✅ | `kick-development:backlog` |
 | **Scrum** | Definition of Ready | ⬜/✅ | `kick-development:definition-of-ready` |
 | **Scrum** | Definition of Done | ⬜/✅ | `kick-development:definition-of-done` |
