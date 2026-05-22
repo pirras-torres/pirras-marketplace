@@ -34,6 +34,7 @@ Present a status table to the user. Mark each document ✅ (file exists) or ⬜ 
 | **Business** | Business Rules | ⬜/✅ | `kick-development:business-rules` |
 | **Business** | Data Model | ⬜/✅ | `kick-development:data-model` |
 | **Design** | UX Spec | ⬜/✅ | `kick-development:ux-spec` |
+| **Design** | UI Spec | ⬜/✅ | `kick-development:ui-spec` |
 | **Design** | Prototype Docs | ⬜/✅ | `kick-development:prototype-docs` |
 | **Tech** | Backend Architecture | ⬜/✅ | `kick-development:backend-architecture` |
 | **Tech** | Frontend Architecture | ⬜/✅ | `kick-development:frontend-architecture` |
