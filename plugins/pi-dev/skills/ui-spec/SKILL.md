@@ -1,6 +1,6 @@
 ---
 name: ui-spec
-description: Use when creating a UI specification. Documents visual design: components, typography, color system, spacing, layout, and design tokens. Pure UI only — no user flows, task logic, or business rules.
+description: "Use when creating a UI specification. Documents visual design: components, typography, color system, spacing, layout, and design tokens. Pure UI only — no user flows, task logic, or business rules."
 ---
 
 # UI Specification

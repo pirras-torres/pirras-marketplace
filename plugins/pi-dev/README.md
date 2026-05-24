@@ -62,8 +62,17 @@ SLICE CYCLE (repeats)
 ## Install
 
 ```bash
-/plugin install kick-development@<your-marketplace>
+/plugin marketplace add <public-repo-url>/.agents/plugins/marketplace.json
+/plugin install kick-development
 ```
+
+This repository includes a Codex marketplace at `.agents/plugins/marketplace.json`.
+Publish the repository, then share the marketplace file URL so other users can add
+the marketplace and install `kick-development`.
+
+The plugin manifest lives at `.codex-plugin/plugin.json` and points to the
+root `skills/` directory. Edit skills only in `skills/`; there is no copied
+skills directory under `.agents/`.
 
 ## How It Works
 

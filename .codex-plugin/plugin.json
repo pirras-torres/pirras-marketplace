@@ -1,0 +1,35 @@
+{
+  "name": "kick-development",
+  "version": "0.2.0",
+  "description": "Skills for building software projects incrementally with Scrum documentation.",
+  "author": {
+    "name": "itorresh",
+    "email": "i.torres.h.esad@gmail.com"
+  },
+  "keywords": [
+    "scrum",
+    "product",
+    "architecture",
+    "documentation",
+    "planning"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Kick Development",
+    "shortDescription": "Build software projects incrementally with Scrum documentation.",
+    "longDescription": "Kick Development provides Codex skills for guiding a project through product, business, design, technical architecture, Scrum planning, risk, and decision documentation.",
+    "developerName": "itorresh",
+    "category": "Productivity",
+    "capabilities": [
+      "Project documentation",
+      "Scrum planning",
+      "Product discovery",
+      "Architecture documentation"
+    ],
+    "defaultPrompt": [
+      "Start with kick-development:guide.",
+      "Create a PRD for this project.",
+      "Plan the next sprint from the backlog."
+    ]
+  }
+}
