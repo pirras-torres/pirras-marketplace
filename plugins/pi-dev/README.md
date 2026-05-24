@@ -1,8 +1,8 @@
-# kick-development
+# pi-dev
 
 Skills for building software projects incrementally with Scrum documentation.
 
-**Start every session with:** `kick-development:guide`
+**Start every session with:** `pi-dev:guide`
 
 The guide reads `project_memory.md`, determines your current phase, and tells you exactly what to do next.
 
@@ -62,17 +62,14 @@ SLICE CYCLE (repeats)
 ## Install
 
 ```bash
-/plugin marketplace add <public-repo-url>/.agents/plugins/marketplace.json
-/plugin install kick-development
+/plugin marketplace add https://raw.githubusercontent.com/pirras-torres/pirras-marketplace/main/marketplace.json
+/plugin install pi-dev
 ```
 
-This repository includes a Codex marketplace at `.agents/plugins/marketplace.json`.
-Publish the repository, then share the marketplace file URL so other users can add
-the marketplace and install `kick-development`.
-
-The plugin manifest lives at `.codex-plugin/plugin.json` and points to the
-root `skills/` directory. Edit skills only in `skills/`; there is no copied
-skills directory under `.agents/`.
+This repository includes a Codex marketplace at the root `marketplace.json`.
+The plugin manifest lives at `plugins/pi-dev/.codex-plugin/plugin.json` and
+points to `plugins/pi-dev/skills/`. Edit skills only in that `skills/`
+directory.
 
 ## How It Works
 

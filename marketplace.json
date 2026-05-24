@@ -1,0 +1,20 @@
+{
+  "name": "pirras-marketplace",
+  "interface": {
+    "displayName": "Pirras Marketplace"
+  },
+  "plugins": [
+    {
+      "name": "pi-dev",
+      "source": {
+        "source": "local",
+        "path": "./plugins/pi-dev"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
