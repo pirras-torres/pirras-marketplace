@@ -7,8 +7,9 @@
     {
       "name": "pi-dev",
       "source": {
-        "source": "local",
-        "path": "./plugins/pi-dev"
+        "source": "github",
+        "repo": "pirras-torres/pirras-marketplace",
+        "path": "plugins/pi-dev"
       },
       "policy": {
         "installation": "AVAILABLE",

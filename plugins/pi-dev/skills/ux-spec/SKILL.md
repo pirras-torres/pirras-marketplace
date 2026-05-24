@@ -1,21 +1,20 @@
 ---
 name: ux-spec
-description: Use when creating a UX specification. Documents user flows, task analysis, navigation structure, interaction logic, and information architecture. Pure UX only — no visual design, colors, typography, or component details.
+description: Use when creating a UX specification. Documents the user experience screen by screen: what users see, what they can do, what each action triggers, and what happens in edge cases. Pure UX only — no visual design, colors, typography, or component details.
 ---
 
 # UX Specification
 
-Documents the user experience: what users do, how they navigate, what they achieve, and what happens when things go wrong. No visual design here — that lives in `ui-spec`.
+Documents the user experience screen by screen. Each screen gets its own section: content, actions, states, and navigation triggers. Flows are captured as cross-screen sequences.
 
-**UX covers:** flows, tasks, navigation, IA, interaction logic, error states, empty states, decision points.  
-**UX does NOT cover:** colors, typography, spacing, components, layout, visual hierarchy.
+**UX covers:** what the user sees (content, not visuals), available actions, navigation triggers, decision points, empty/loading/error states, interaction rules.  
+**UX does NOT cover:** colors, typography, spacing, component names, layout, visual hierarchy.
 
 ## Process
 
 ```
-Scan context → Platform + constraints → Information architecture
-→ Key user flows → Per flow: steps + decision points + failure states
-→ Navigation structure → Empty and error states → Write
+Scan context → Confirm screens list → Interview each screen one by one
+→ Capture cross-screen flows → Write
 ```
 
 ## Detect docs folder
@@ -26,7 +25,7 @@ find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" 
 ```
 
 - **1 result:** use that path as docs root (e.g., `./docs`)
-- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use?"
 - **No result:** use `docs/` and create it if missing
 
 ## Step 0 — Scan context
@@ -38,55 +37,63 @@ Before asking anything:
 - Read `docs/02_business/domain_model.md` → entities the user interacts with
 - Tell user what you found. Confirm it's current.
 
-## Step 1 — Platform and scope
+## Step 1 — Platform and constraints
 
-**Q1:** "What platform is this for?" (AskUserQuestion options: Mobile iOS/Android / Web browser / Desktop / Multiple)
+**Q1:** "What platform is this for?" (AskUserQuestion: Mobile iOS/Android / Web browser / Desktop / Multiple)
 
-**Q2:** "Are there experience constraints I should know about?" (free text)
-Examples: "must work offline", "users are not tech-savvy", "accessibility required (WCAG AA)", "one-handed use on mobile"
+**Q2:** "Any experience constraints?" (free text)  
+Examples: "must work offline", "users are not tech-savvy", "accessibility WCAG AA", "one-handed mobile use"
 
-## Step 2 — Information architecture
+## Step 2 — Screen inventory
 
-**Q3:** "What are the main sections or areas of the product? (top-level navigation)" (free text)
-Example: "Dashboard, Accounts, Transactions, Settings"
+**Q3:** "List all screens (or major views) in the product. Give each a short name."  
+Example: "Dashboard, Account Detail, Add Account, Transactions, Settings"
 
-**Q4:** "How do users move between sections? Describe the navigation model." (free text)
-Example: "Bottom tab bar", "Side drawer", "Top nav with nested pages", "Single-page with modals"
+Present the list back. Ask user to confirm or adjust before continuing.
 
-For each section the user lists, ask:
-**"What does [section] contain? What can the user do there?"** (free text)
+Also ask: **Q4:** "How do users navigate between screens? Describe the navigation model."  
+Example: "Bottom tab bar", "Side drawer", "Stack navigation with back", "Single page with modals"
 
-## Step 3 — Key user flows
+## Step 3 — Screen-by-screen interview
 
-**Q5:** "What are the 3-5 most critical tasks a user must complete in this product?" (free text)
-Example: "Add an account", "Record a transaction", "Check available balance", "Make a credit payment"
+For **each screen** in the confirmed list, run this interview in order. Do one screen at a time — do not batch.
 
-For each task, walk through it completely:
+---
 
-**Q6a:** "What triggers [task]? Where does the user start?" (free text)
+**"Let's describe [Screen Name]."**
 
-**Q6b:** "Walk through the steps: what does the user do at each step?" (free text)
-Push for specifics: "User taps X → sees Y → selects Z → confirms → arrives at W"
+**Sa:** "What does the user see when they arrive at this screen? Describe the content — not the layout, not the visuals. What information is present?"  
+(free text — push for specifics: amounts, labels, lists, counts, summaries)
 
-**Q6c:** "What decisions does the user make during this flow? (branching points)" (free text)
-Example: "User chooses account type → flow branches to cash / debit / credit path"
+**Sb:** "What actions can the user take from this screen? List them all — buttons, taps, swipes, links, anything interactive."  
+(free text — capture every entry point)
 
-**Q6d:** "What can go wrong? List failure states and what the user experiences." (free text)
-Example: "Insufficient balance → system blocks action + shows message", "No accounts yet → empty state with CTA"
+For each action listed in Sb:
+**Sc:** "When the user does [action], what happens? Does it open a modal, navigate to another screen, trigger a system change, or something else?"  
+(free text — identify the destination or effect of every action)
 
-## Step 4 — Empty states and edge cases
+**Sd:** "What states does this screen have?"  
+Prompt for each:
+- **Empty state:** what does the user see when there is no data yet?
+- **Loading state:** is there a waiting moment? What is the user doing during it?
+- **Error state:** what can go wrong here? What does the user experience?
+- **Partial state:** are there combinations of data that produce a different view? (e.g., has accounts but no transactions)
 
-**Q7:** "For each main section, what does the user see when there is no data yet?" (free text)
-Empty states are UX decisions — define them explicitly, not as "TBD".
+**Se:** "Are there non-obvious rules on this screen that a developer would not guess?"  
+Examples: "Credit accounts are excluded from the net worth total", "Cash is shown separately because it doesn't count toward available balance"
 
-**Q8:** "Are there states that require user action before continuing? (onboarding gates, required setup)" (free text)
+---
 
-## Step 5 — Interaction logic
+After finishing all screens, ask:
 
-**Q9:** "Are there any non-obvious interaction rules? (things a developer would not guess)" (free text)
-Examples: "Deleting an account requires confirming coverage of linked transactions first", "Payments can only be made from debit/cash accounts, never from credit"
+**Q5:** "Are there any cross-screen flows I should document explicitly? (sequences that span multiple screens and have their own logic)"  
+Example: "Onboarding setup", "Make a payment end-to-end", "Resolve an overdue debt"
 
-**Q10:** "What confirmations does the user need to see before irreversible actions?" (free text)
+For each cross-screen flow:
+- **Trigger:** where does it start and why?
+- **Steps:** screen → action → screen → action → ... → end state
+- **Decision points:** where does the path branch?
+- **Failure states:** what stops the flow and what does the user see?
 
 ## Document Generation
 
@@ -95,81 +102,129 @@ Examples: "Deleting an account requires confirming coverage of linked transactio
 
 **Project:** [name]
 **Platform:** [Q1]
-**Status:** Foundational UX spec
+**Navigation model:** [Q4]
+**Status:** Draft
 **Date:** [today]
 
-> This document covers user experience only: flows, tasks, navigation, and interaction logic.
-> Visual design (colors, typography, components, spacing) is documented in `docs/03_design/ui_spec.md`.
+> UX only: content, actions, states, navigation, interaction rules.
+> Visual design lives in `docs/03_design/ui_spec.md`.
 
-## 1. Context
+## Context
 
 [Product name and core value from PRD. Target user from personas.]
 
 **Experience constraints:** [Q2]
 
-## 2. Information Architecture
+---
 
-**Navigation model:** [Q4]
-
-### Sections
-
-| Section | Purpose | Key tasks |
-|---------|---------|-----------|
-| [section 1] | [Q3 purpose] | [Q3 tasks] |
-| [...] | [...] | [...] |
-
-## 3. User Flows
-
-### Flow: [Task name]
-
-**Trigger:** [Q6a — where user starts]
-
-**Steps:**
-1. User: [action] → System: [response/state change]
-2. User: [action] → System: [response]
-3. [...]
-
-**Decision points:**
-- If [condition A] → [path A]
-- If [condition B] → [path B]
-
-**Failure states:**
-- [Failure 1]: [what user experiences]
-- [Failure 2]: [what user experiences]
-
-**End state:** [what success looks like for the user]
+## Screens
 
 ---
 
-[Repeat for each flow]
+### [Screen Name]
 
-## 4. Empty States
+**What the user sees:**  
+[Sa — content present on arrival, described as information not visuals]
 
-| Section | Empty state | User action available |
-|---------|------------|----------------------|
-| [section] | [Q7 description] | [CTA or none] |
+**Actions available:**
 
-## 5. Onboarding and Gates
+| Action | Triggers |
+|--------|---------|
+| [action] | [Sc — destination or effect] |
+| [...] | [...] |
 
-[Q8 — required setup or onboarding gates before core flows are available]
+**States:**
 
-## 6. Interaction Rules
+- **Empty:** [Sd empty]
+- **Loading:** [Sd loading — omit if not applicable]
+- **Error:** [Sd error]
+- **Partial:** [Sd partial — omit if not applicable]
 
-[Q9 — non-obvious rules the system enforces]
+**Interaction rules:**  
+[Se — non-obvious constraints. Omit section if none.]
 
-**Confirmations required before irreversible actions:**
-[Q10]
 ```
+
+Each screen generates its own file. Cross-screen flows go in a separate file.
 
 ## File Output
 
 - Create `docs/03_design/` if missing
-- Write to `docs/03_design/ux_spec.md`
-- After writing, offer to create `docs/03_design/ui_spec.md` using `kick-development:ui-spec`
+- One file per screen: `docs/03_design/ux_[screen-name-kebab].md`
+  - Example: `ux_dashboard.md`, `ux_account_detail.md`, `ux_add_account.md`
+- Cross-screen flows: `docs/03_design/ux_flows.md` — only if Q5 produced flows
+- After all files written, offer to create UI specs using `kick-development:ui-spec`
+
+### Screen file template
+
+```markdown
+# UX — [Screen Name]
+
+**Project:** [name]  
+**Platform:** [Q1]  
+**Status:** Draft  
+**Date:** [today]
+
+> UX only: content, actions, states, navigation, interaction rules.
+> Visual design lives in the corresponding `ui_` file.
+
+## What the user sees
+
+[Sa — content present on arrival, described as information not visuals]
+
+## Actions
+
+| Action | Triggers |
+|--------|---------|
+| [action] | [destination or effect] |
+
+## States
+
+- **Empty:** [Sd empty]
+- **Loading:** [Sd loading — omit if not applicable]
+- **Error:** [Sd error]
+- **Partial:** [Sd partial — omit if not applicable]
+
+## Interaction rules
+
+[Se — non-obvious constraints. Omit section if none.]
+```
+
+### Flows file template (`ux_flows.md`)
+
+```markdown
+# UX — Cross-screen Flows
+
+**Project:** [name]  
+**Date:** [today]
+
+## Flow: [Flow name]
+
+**Trigger:** [where and why it starts]
+
+**Steps:**
+1. [Screen] — User: [action] → [Screen or modal]
+2. [Screen] — User: [action] → [outcome]
+
+**Decision points:**
+- If [condition] → [path A]
+- If [condition] → [path B]
+
+**Failure states:**
+- [Failure]: [what user experiences]
+
+**End state:** [what success looks like]
+
+---
+
+[Repeat for each flow]
+```
 
 ## Quality Check Before Writing
 
-- Every flow has at least one failure state
-- Every section has an empty state defined
+- Every screen has at least one action documented
+- Every screen has an empty state defined (even if "not applicable — data always exists")
+- Every action has a documented destination or effect
 - No mention of colors, fonts, spacing, or component names
 - Interaction rules reference domain entities (from domain model), not visual elements
+- Cross-screen flows have at least one failure state each
