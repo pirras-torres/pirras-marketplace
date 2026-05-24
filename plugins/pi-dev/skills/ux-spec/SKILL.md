@@ -1,6 +1,6 @@
 ---
 name: ux-spec
-description: Use when creating a UX specification. Documents the user experience screen by screen: what users see, what they can do, what each action triggers, and what happens in edge cases. Pure UX only — no visual design, colors, typography, or component details.
+description: "Use when creating a UX specification. Documents the user experience screen by screen: what users see, what they can do, what each action triggers, and what happens in edge cases. Pure UX only - no visual design, colors, typography, or component details."
 ---
 
 # UX Specification
