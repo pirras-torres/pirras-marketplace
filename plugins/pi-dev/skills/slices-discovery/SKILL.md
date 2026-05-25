@@ -1,6 +1,6 @@
 ---
 name: slices-discovery
-description: Use when doing slice discovery before creating backlog items. Supports four slice types: Functional (user-visible feature), Enabler (unblocks other slices), Spike (time-boxed investigation), Foundational (infra/environment setup). Interviews the user to define scope, traceability, dependencies, and a verifiable smoke test. Writes one file per slice to docs/05_scrum/discovery/.
+description: "Use when doing slice discovery before creating backlog items. Supports four slice types: Functional (user-visible feature), Enabler (unblocks other slices), Spike (time-boxed investigation), Foundational (infra/environment setup). Interviews the user to define scope, traceability, dependencies, and a verifiable smoke test. Writes one file per slice to docs/05_scrum/discovery/."
 ---
 
 # Slice Discovery

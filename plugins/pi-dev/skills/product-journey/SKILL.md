@@ -1,6 +1,6 @@
 ---
 name: product-journey
-description: Use when creating a Product Journey document. Maps the user's full experience from first contact through recurring use using industry-standard journey mapping structure: Actor → Stage → Goal → Actions → Touchpoints → Emotions → Pain points → Opportunities. Outputs Slice signals per stage that slice-discovery can consume. Writes to docs/01_product/.
+description: "Use when creating a Product Journey document. Maps the user's full experience from first contact through recurring use using industry-standard journey mapping structure: Actor → Stage → Goal → Actions → Touchpoints → Emotions → Pain points → Opportunities. Outputs Slice signals per stage that slice-discovery can consume. Writes to docs/01_product/."
 ---
 
 # Product Journey
