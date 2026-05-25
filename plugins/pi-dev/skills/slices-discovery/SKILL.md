@@ -1,42 +1,22 @@
 ---
 name: slices-discovery
-description: Use when doing slice discovery before creating backlog items. Answers what a slice covers, why it matters, what dependencies exist, and whether there is enough information to create verifiable PBIs.
+description: Use when doing slice discovery before creating backlog items. Supports four slice types: Functional (user-visible feature), Enabler (unblocks other slices), Spike (time-boxed investigation), Foundational (infra/environment setup). Interviews the user to define scope, traceability, dependencies, and a verifiable smoke test. Writes one file per slice to docs/05_scrum/discovery/.
 ---
 
 # Slice Discovery
 
 Document ONE slice per run. Each slice gets its own file: `docs/05_scrum/discovery/S1.md`, `S2.md`, etc.
 
-**Discovery answers:** what the slice covers, why it matters, what rules/data/UX/tech are affected, what is decided vs assumed vs pending.  
-**Discovery does NOT produce:** PBI lists, acceptance criteria for individual stories, estimates, sprint assignments, or final API contracts.
+**You are a Senior PM.** Not a passive scribe. Interrupt when:
+- User describes a technical layer as a slice → push back
+- Smoke test cannot be defined → block and split
+- Scope spans multiple journey stages → warn and recommend splitting
+- Spike has no defined deliverable → block
+- Foundational slice has no DoD → block
 
-## What Makes a Good Slice
+Tone: direct, helpful, protective of quality.
 
-A slice is valid when it:
-- Improves an expected outcome from the Product Goal or reduces a risk that blocks it
-- Is traceable to a specific part of the PRD, Product Goal, or Product Journey
-- Is vertical: user-visible + data + business rule + observable evidence
-- Is smaller than the full product vision
-- Leaves something deliberately outside (scope control)
-- Enables learning before the full backlog is created
-
-**Antipatterns — reject these:**
-- Slice per layer: "Build the frontend", "Build the API", "Build the DB schema"
-- Slice so broad it covers the whole product
-- Slice chosen because code already exists
-- Slice with no user-visible outcome
-
-## Slice Size
-
-A slice should be deliverable within one sprint (1–2 weeks) by the team. If it can't be, it must be split before creating PBIs.
-
-## Process
-
-```
-Scan context → Select slice → Traceability → Scope → Business rules + data
-→ UX + frontend → Backend → Dependencies → Decisions / Assumptions / Pending
-→ Sufficiency check → Write → Promotion rule
-```
+---
 
 ## Detect docs folder
 
@@ -45,166 +25,249 @@ Run:
 find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
 ```
 
-- **1 result:** use that path as docs root (e.g., `./docs`)
-- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **1 result:** use that path as docs root
+- **Multiple results:** ask user which one to use
 - **No result:** use `docs/` and create it if missing
+
+---
 
 ## Step 0 — Scan context
 
-Read the following and tell the user what you found:
+Read and summarize to the user what you found:
+
 - `docs/01_product/01_prd.md` → problem, scope
-- `docs/01_product/02_product_goal.md` → expected outcomes
-- `docs/01_product/05_product_journey.md` → journey stages (use as map, not sequence)
-- `docs/02_business/domain_model.md` → entities and rules
-- `docs/05_scrum/backlog.md` → existing slices already discovered (to assign correct S# number)
+- `docs/01_product/05_product_journey.md` → journey stages and their Slice signals
+- `docs/05_scrum/discovery/S*.md` → count existing to determine next S number
 
-Count existing `docs/05_scrum/discovery/S*.md` files to determine the next ID.
+Extract from Journey: stage names, Slice signals per stage, entities mentioned. Store these — use them to pre-populate questions in Step 2 instead of asking from scratch.
 
-## Step 1 — Slice selection
+---
 
-**Q1:** "What slice are we discovering? Describe it in one sentence as user value." (free text)
+## Step 1 — Slice type
 
-If the user describes a technical layer ("build the API", "create the database"), push back:
-> "That sounds like a layer, not a slice. What can the user DO or SEE after this work that they couldn't before?"
+Ask: **"What type of slice is this?"**
 
-**Q2:** "Which part of the PRD or Product Goal does this slice address?" (free text)
-Expected: reference to a specific problem, outcome, or journey stage.
+Options:
+- **Functional** — user-visible feature with UX, data, business rule, observable outcome
+- **Enabler** — technical capability that unblocks other slices (auth, infra, observability, CI/CD integration)
+- **Spike** — time-boxed investigation that produces a decision, PoC, or benchmark — not a feature
+- **Foundational** — project skeleton, environments, pipelines; done once before anything else
 
-**Q3:** "Why this slice now? What does it unblock or validate?" (free text)
+If user describes a technical layer ("build the API", "create the DB schema") → interrupt:
+> "That sounds like a layer, not a slice. What can the user DO or SEE after this work that they couldn't before? Or is this an Enabler or Foundational slice?"
 
-## Step 2 — Scope
+Each type branches into its own interview below.
 
-**Q4:** "What is explicitly inside this slice?" (free text)
-Be specific: which screens, which entities, which user actions.
+---
 
-**Q5:** "What is explicitly outside this slice? (deferred to later slices)" (free text)
-This is as important as Q4. No scope without explicit exclusions.
+## Functional Slice Interview
 
-## Step 3 — Business rules and data
+**Pattern: propose → confirm → correct.** Use Journey data from Step 0 to pre-populate. Do not ask blank free-text when you already have signal.
 
-**Q6:** "Which business rules from the domain model are activated by this slice?" (free text)
-Reference rules by name if possible. If no rules apply, answer "None".
+**Q1:** "Describe this slice as user value in one sentence."
 
-**Q7:** "Which data entities are read or written in this slice?" (free text)
-Reference `data_model.md` fields if they exist. New fields required? Flag them.
+**Q2:** "Which Journey stage does this trace to?" — offer the stage names detected in Step 0 as options.
 
-## Step 4 — UX
+If scope covers more than one stage → warn:
+> "This looks like it spans [Stage A] and [Stage B]. Recommend splitting by stage. Want to start with [Stage A]?"
 
-**Q8:** "Which user flows or screens from the UX spec are involved?" (free text or "Not documented yet")
+**Q3:** "Why this slice now? What does it unblock or validate?"
 
-If not documented: "What does the user experience in this slice? Describe the flow in steps." (free text)
+**Q4 — Scope inside:** Propose entities/screens from the Journey signal for the selected stage.
+> "Based on [Stage X], I see [Entity A, Screen B] as candidates. What's explicitly inside this slice?"
 
-## Step 5 — Frontend and backend impact
+User confirms, corrects, or adds.
 
-**Q9:** "What does the frontend need to implement for this slice?" (free text)
-New screen / new component / modification to existing / none.
+**Q5 — Scope outside:** "What is explicitly deferred to a later slice?" (always free text — no proposals here)
 
-**Q10:** "What does the backend need to implement?" (free text)
-New endpoint / new query / new service / modification / none.
+**Q6 — Business rules:** Propose any rules associated with detected entities.
+> "These entities suggest rules around [X]. Which business rules does this slice activate? Any others?"
 
-Ask only for the layers that exist in the project. If no architecture docs found in Step 0, skip layer-specific questions and ask generically: "What technical work is needed?"
+**Q7 — Data entities:** Propose entities from Journey signal.
+> "Detected [User, Transaction] from the Journey. Does this slice read or write them? Any new fields or entities?"
 
-## Step 6 — Dependencies
+**Q8 — UX flows:** Propose flows linked to the Journey stage.
+> "Journey stage [X] suggests [flow description]. Which UX flows or screens are involved? Not documented yet?"
 
-**Q11:** "What dependencies could block PBI creation for this slice?" (free text)
-Examples: "UX spec for this screen doesn't exist yet", "Domain model missing [entity]", "API contract for [endpoint] not defined"
+**Q9 — Frontend:** "What does the frontend need to implement? (new screen / component / modification / none)"
 
-Distinguish: **blocking** (must resolve before PBIs) vs **non-blocking** (can proceed, flag as assumption).
+**Q10 — Backend:** "What does the backend need to implement? (new endpoint / query / service / modification / none)"
 
-## Step 7 — Decisions, assumptions, pending
+Skip Q9/Q10 if no architecture docs found in Step 0 — ask generically: "What technical work is needed?"
 
-**Q12:** "What is already decided about this slice?" (free text)
+**Q11 — Dependencies:**
+> "What could block PBI creation for this slice?"
 
-**Q13:** "What are you assuming but haven't verified?" (free text)
+If user names an enabler (auth, infra, logging) as a blocking dependency → interrupt:
+> "This sounds like an Enabler slice. Do you want to discover it as S[N] now and then return to this slice, or document it as an assumption and continue?"
 
-**Q14:** "What questions remain open? Mark each: does it block PBI creation or not?" (free text)
+If "discover now" → pause this slice, run Enabler interview for the dependency, then return.
 
-## Sufficiency check
+Classify each dependency: **Blocking** (must resolve before PBIs) vs **Non-blocking** (flag as assumption).
+
+**Q12 — Smoke test:**
+> "Define one verifiable end-to-end check: the user does [X], the system does [Y], and [Z] is observable in the data or UI."
+
+If user cannot define this → interrupt:
+> "If you can't define one end-to-end check, the slice is still too large. Where would you cut it? Let's split it now."
+
+Do not write the document until the smoke test is defined.
+
+**Q13 — Decided:** "What is already decided about this slice?"
+
+**Q14 — Assumed:** "What are you assuming but haven't verified?"
+
+**Q15 — Pending:** "What questions remain open? Mark each: does it block PBI creation or not?"
+
+---
+
+## Enabler Slice Interview
+
+**Q1:** "What capability does this enabler provide?"
+
+**Q2:** "Which functional slices does it unblock? List them."
+
+**Q3:** "What technical work is required to implement this enabler?"
+
+**Q4:** "What is explicitly out of scope for this enabler?"
+
+**Q5:** "What decisions about this enabler are already made?"
+
+**Q6:** "What is still open or uncertain?"
+
+No UX questions. Business rules only if the enabler has compliance or data implications.
+
+---
+
+## Spike Slice Interview
+
+**Q1:** "What question does this spike answer?"
+
+**Q2:** "What is the timebox?" — must fit within one sprint. If not, split the investigation.
+
+**Q3:** "What is the expected output at the end?" — must be one of: decision / PoC / benchmark / documented finding.
+
+If no concrete output defined → block:
+> "A spike without a deliverable is just uncertainty. What does the team decide or produce at the end? Without that, this spike cannot be closed."
+
+**Q4:** "Which slices does this spike unblock?"
+
+**Q5:** "What is out of scope?"
+
+---
+
+## Foundational Slice Interview
+
+**Q1:** "What foundational capability does this establish?"
+
+**Q2:** "What must be true before any other slice can begin? List the prerequisites this slice satisfies."
+
+**Q3 — DoD:** "What is the Definition of Done for this foundational work?"
+
+If no DoD defined → block:
+> "Foundational work with no DoD cannot be closed. Define at least one measurable completion criterion."
+
+Remind the user: DoD for foundational slices must include non-functional rules — encryption at rest/transit, environment parity, secrets management — even when there is no user-visible UX. Security architecture is born here.
+
+**Q4:** "What is explicitly out of scope?"
+
+---
+
+## Sufficiency Check (Functional only)
 
 Before writing, verify:
-- Slice has a user-visible outcome
-- Scope has explicit inclusions AND exclusions
-- At least one business rule or data entity is identified
-- Blocking dependencies are listed (or confirmed none exist)
-- The slice fits within one sprint
+- [ ] User-visible outcome defined
+- [ ] Scope has explicit inclusions AND exclusions
+- [ ] At least one business rule or data entity identified
+- [ ] Blocking dependencies listed or confirmed none
+- [ ] Smoke test defined
+- [ ] Fits within one sprint
 
-If any check fails, ask the missing question before writing.
+If any check fails → ask the missing question before writing.
+
+---
 
 ## Document Generation
 
-File: `docs/05_scrum/discovery/S[N].md` where N = next available number.
+File: `docs/05_scrum/discovery/S[N].md` — N = next available number.
+
+### Functional template
 
 ```markdown
 # S[N]: [Human name of slice]
 
 **Date:** [today]
+**Type:** Functional
 **Status:** Discovery complete / Discovery in progress
 
 ## Traceability
 
-**PRD section:** [Q2 — which problem or scope area]
-**Product Goal outcome:** [Q2 — which expected outcome]
-**Product Journey stage:** [which stage this slice addresses]
+**PRD section:** [which problem or scope area]
+**Journey stage:** [which stage this slice addresses]
 
 ## Why This Slice
 
-[Q3 — what it unblocks or validates]
+[Why now — what it unblocks or validates]
 
 ## Scope
 
 **Inside:**
-[Q4 — specific screens, entities, user actions]
+[specific screens, entities, user actions]
 
 **Outside (deferred):**
-[Q5 — explicit exclusions]
+[explicit exclusions]
 
 ## Business Rules
 
-[Q6 — rules activated. "None" if not applicable]
+[rules activated — "None" if not applicable]
 
-Links: [reference to `docs/02_business/business_rules.md` sections if applicable]
+Links: [reference to docs/02_business/business_rules.md if applicable]
 
 ## Data
 
-[Q7 — entities read/written, new fields required]
+[entities read/written, new fields required]
 
-Links: [reference to `docs/02_business/data_model.md` if applicable]
+Links: [reference to docs/02_business/data_model.md if applicable]
 
 ## UX
 
-[Q8 — flows and screens involved]
+[flows and screens involved]
 
-Links: [reference to `docs/03_design/ux_spec.md` if applicable]
+Links: [reference to docs/03_design/ux_spec.md if applicable]
 
 ## Frontend
 
-[Q9 — what frontend needs to implement]
+[what frontend needs to implement]
 
 ## Backend
 
-[Q10 — what backend needs to implement]
+[what backend needs to implement]
+
+## Smoke Test
+
+[user does X → system does Y → Z is observable]
 
 ## Dependencies
 
 **Blocking (must resolve before PBIs):**
-- [dependency 1]
+- [dependency]
 
 **Non-blocking (flag as assumption):**
-- [dependency 1]
+- [dependency]
 
 ## Decided
 
-[Q12]
+[what is already decided]
 
 ## Assumed
 
-[Q13]
+[what is assumed but not verified]
 
 ## Pending
 
 | Question | Blocks PBIs? |
 |----------|-------------|
-| [Q14 question 1] | Yes / No |
+| [question] | Yes / No |
 
 ## Sufficiency for PBIs
 
@@ -212,8 +275,106 @@ This discovery is sufficient to create verifiable PBIs when:
 - [ ] All blocking dependencies resolved
 - [ ] UX documented for affected flows
 - [ ] Business rules confirmed or flagged as assumption
+- [ ] Smoke test agreed with team
 - [ ] Scope agreed with team
 ```
+
+### Enabler template
+
+```markdown
+# S[N]: [Enabler name]
+
+**Date:** [today]
+**Type:** Enabler
+**Status:** Discovery complete / Discovery in progress
+
+## Capability Provided
+
+[what this enabler makes possible]
+
+## Unblocks
+
+[list of functional slices that depend on this]
+
+## Technical Work
+
+[what needs to be implemented]
+
+## Out of Scope
+
+[explicit exclusions]
+
+## Decided
+
+[decisions already made]
+
+## Pending
+
+| Question | Blocks implementation? |
+|----------|----------------------|
+| [question] | Yes / No |
+```
+
+### Spike template
+
+```markdown
+# S[N]: [Spike name]
+
+**Date:** [today]
+**Type:** Spike
+**Status:** Discovery complete / Discovery in progress
+
+## Question
+
+[the question this spike answers]
+
+## Timebox
+
+[X days — must fit within one sprint]
+
+## Expected Output
+
+[decision / PoC / benchmark / documented finding]
+
+## Unblocks
+
+[slices that depend on this spike's output]
+
+## Out of Scope
+
+[explicit exclusions]
+```
+
+### Foundational template
+
+```markdown
+# S[N]: [Foundational capability name]
+
+**Date:** [today]
+**Type:** Foundational
+**Status:** Discovery complete / Discovery in progress
+
+## Capability Established
+
+[what this foundational work sets up]
+
+## Prerequisites Satisfied
+
+[what other slices can now begin after this is done]
+
+## Definition of Done
+
+- [ ] [measurable criterion]
+- [ ] [measurable criterion]
+
+*Note: DoD must include non-functional requirements — encryption, environment parity, secrets management.*
+
+## Out of Scope
+
+[explicit exclusions]
+```
+
+---
 
 ## File Output
 
@@ -223,15 +384,15 @@ This discovery is sufficient to create verifiable PBIs when:
 
 ## Promotion Rule
 
-If during discovery you identified a stable business rule, shared data decision, general UX decision, or cross-cutting technical decision that is NOT yet in the canonical docs — flag it:
+If during discovery you identified a stable business rule, shared data decision, general UX decision, or cross-cutting technical decision not yet in canonical docs — flag it:
 
 > "Discovery found [X] which should be added to [canonical doc]. Want me to update it now?"
 
-Update canonical doc if user confirms. Discovery links to it, does not duplicate it.
+Update canonical doc if user confirms. Discovery links to it, does not duplicate.
 
 ## Running Multiple Slices
 
-Each slice is one run of this skill. After completing S1, ask:
+Each slice is one run of this skill. After completing S[N], ask:
 > "Want to discover the next slice? (S[N+1])"
 
 If yes, restart from Step 1 with the same context already loaded.

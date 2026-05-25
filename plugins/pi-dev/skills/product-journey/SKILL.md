@@ -1,17 +1,19 @@
 ---
 name: product-journey
-description: Use when creating a Product Journey document. Maps the user's experience from first contact through recurring use and long-term retention. Writes to 01_product/.
+description: Use when creating a Product Journey document. Maps the user's full experience from first contact through recurring use using industry-standard journey mapping structure: Actor → Stage → Goal → Actions → Touchpoints → Emotions → Pain points → Opportunities. Outputs Slice signals per stage that slice-discovery can consume. Writes to docs/01_product/.
 ---
 
 # Product Journey
 
-Interview the user to map the full product experience. Write to `docs/01_product/05_product_journey.md`.
+Interview the user to map the full product experience using industry-standard journey mapping structure. Write to `docs/01_product/05_product_journey.md`.
 
-## Process
+## Structure
 
 ```
-Scan context → Journey stages → Per stage: user state, actions, system response, emotion → Write
+Actor → Stage → Goal → Actions → Touchpoints → Emotions → Pain points → Opportunities → Slice signals
 ```
+
+---
 
 ## Detect docs folder
 
@@ -20,69 +22,134 @@ Run:
 find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" | sort
 ```
 
-- **1 result:** use that path as docs root (e.g., `./docs`)
-- **Multiple results:** use AskUserQuestion — "Found multiple docs folders: [list]. Which one should I use for this project?"
+- **1 result:** use that path as docs root
+- **Multiple results:** ask user which one to use
 - **No result:** use `docs/` and create it if missing
+
+---
 
 ## Step 0 — Scan context
 
-Read `docs/` personas and PRD if they exist. Extract: who the user is, what their goal is.
+Read `docs/01_product/01_prd.md` and `docs/01_product/04_personas.md` if they exist. Extract: who the primary user is, what their core problem is, what success looks like for the product. Use this to ground the interview — do not re-ask what's already documented.
 
-## Interview (one question at a time with AskUserQuestion)
+---
 
-**Q1:** "What are the main stages of the user's journey? (from first contact to regular use)"
-Example stages: Discovery → Onboarding → First value → Regular use → Churn risk
-(free text — let user define their own stages)
+## Interview
 
-For each stage the user defines, ask:
+One question at a time using AskUserQuestion.
 
-**Q2a:** "At [stage name]: What does the user want to achieve?" (free text)
+**Q1:** "What are the main stages of the user's journey — from first contact to regular use? Name them in order."
 
-**Q2b:** "At [stage name]: What actions does the user take? What does the system do in response?" (free text)
+Example stages: Discovery → Onboarding → First value → Regular use → Retention risk  
+Let the user define their own. Do not impose a template.
 
-**Q2c:** "At [stage name]: What is the user's emotional state? What could go wrong here?" (free text)
+---
 
-**Q3:** "What is the most critical moment — when does the user decide to keep using or abandon the product?" (free text)
+For **each stage** the user defines, ask the following in sequence:
 
-**Q4:** "What does success look like at the END of the journey? How is the user different than at the start?" (free text)
+**Q2 — Goal:** "At [stage name]: what does the user want to achieve? How does this stage goal connect to the product's overall purpose?"
+
+**Q3 — Actions & triggers:** "At [stage name]: what specific actions does the user take? What triggers each action — what makes the user decide to act?"
+
+**Q4 — Touchpoints:** "At [stage name]: what does the user interact with? (screens, buttons, emails, notifications, people, physical objects)"
+
+**Q5 — Emotional state:** "At [stage name]: what is the user's emotional state? Use a scale if helpful: frustrated → neutral → confident → delighted."
+
+**Q6 — Pain points:** "At [stage name]: what can go wrong? What would cause the user to stop or fail at this stage?"
+
+**Q7 — Opportunities:** "At [stage name]: what one change would most improve this stage for the user?"
+
+---
+
+After all stages:
+
+**Q8 — Critical moment:** "At what exact point does the user decide to keep using the product — or abandon it?"
+
+**Q9 — End state:** "At the end of a successful journey, how is the user different from when they started? What changed for them?"
+
+**Q10 — External friction:** "Are there any stages where the user cannot proceed without something outside their control — waiting for approval, connectivity, a third party, a physical process?"
+
+---
 
 ## Document Generation
 
 ```markdown
 # Product Journey
 
-**Project:** [name]
+**Project:** [name from PRD]
 **Date:** [today]
+**Primary actor:** [from personas or PRD]
 
 ## Journey Overview
 
-[Brief description of the arc: from first contact to regular use]
+[2–3 sentence arc: from first contact to regular use, what transforms for the user]
 
-**Critical moment:** [Q3]
-
----
-
-## Stage 1: [Stage Name]
-
-**User goal:** [Q2a]
-
-**Actions and system response:**
-- User: [action]
-- System: [response]
-- [...]
-
-**Emotional state:** [Q2c — emotion]
-
-**Risk at this stage:** [Q2c — what could go wrong]
+**Critical moment:** [Q8 — the decision point]
 
 ---
 
-[Repeat for each stage]
+## Stage [N]: [Stage Name]
+
+**Goal:** [Q2 — what the user wants to achieve at this stage, and how it connects to the product's purpose]
+
+**Actions and triggers:**
+- User: [action] — triggered by [what]
+- User: [action] — triggered by [what]
+
+**Touchpoints:**
+- [screen / email / notification / person / object]
+
+**Emotional state:** [Q5 — emotion label or scale position]
+
+**Pain points:**
+- [Q6 — what can go wrong]
+
+**Opportunities:**
+- [Q7 — what would most improve this stage]
+
+**Slice signals:**
+- [plain-language description of what the system must support at this stage — no tech prescriptions]
+- Example: "User needs to identify themselves before seeing personalized content"
+- Example: "System must remember user's progress between sessions"
+
+---
+
+[Repeat Stage block for each stage]
+
+---
 
 ## End State
 
-[Q4 — how the user is different at the end of a successful journey]
+[Q9 — how the user is different at the end of a successful journey]
+
+---
+
+## External Friction & Risks
+
+| Stage | Friction | Risk / Assumption |
+|-------|----------|-------------------|
+| [stage name] | [what the user cannot control] | [assumption the team must validate] |
+
+*This section is for the tech team. It does not change the journey narrative above.*
 ```
+
+---
+
+## Slice signals guidance
+
+Slice signals must be:
+- Written in plain language — what the user needs, not how to build it
+- Traceable to a specific stage
+- Free of architectural decisions (no "OAuth", "REST API", "database")
+- Actionable: `slice-discovery` uses them to pre-populate scope questions for functional slices
+
+Good: "User needs to identify themselves before proceeding"  
+Bad: "Implement JWT auth with refresh tokens"
+
+Good: "System must show the user their past activity"  
+Bad: "Build a history table in PostgreSQL"
+
+---
 
 ## File Output
 
