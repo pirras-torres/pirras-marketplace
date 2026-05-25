@@ -30,7 +30,14 @@ find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" 
 
 ## Step 0 — Scan context
 
-Read `docs/01_product/01_prd.md` and `docs/01_product/04_personas.md` if they exist. Extract: who the primary user is, what their core problem is, what success looks like for the product. Use this to ground the interview — do not re-ask what's already documented.
+Read the following if they exist:
+
+- `docs/01_product/01_prd.md` → primary user, core problem, out-of-scope items, and **Section 8: Slice signals** (signals already captured during the PRD interview)
+- `docs/01_product/04_personas.md` → persona name, context, goals
+
+Extract: who the primary user is, what their core problem is, what success looks like. Use this to ground the interview — do not re-ask what's already documented.
+
+Also extract PRD Slice signals (if section 8 exists) and carry them forward — they will be merged into the relevant Journey stage's Slice signals during document generation, avoiding duplication.
 
 ---
 
@@ -107,8 +114,13 @@ After all stages:
 **Opportunities:**
 - [Q7 — what would most improve this stage]
 
+**Stage ID:** S-[N] *(e.g. S-1, S-2 — sequential, used by slices-discovery to reference this stage)*
+
+**Entities:** [comma-separated list of domain entities involved at this stage — e.g. User, Session, Transaction]
+
 **Slice signals:**
-- [plain-language description of what the system must support at this stage — no tech prescriptions]
+- [plain-language description of what the system must support — no tech prescriptions]
+- [merge any PRD Slice signals that belong to this stage here]
 - Example: "User needs to identify themselves before seeing personalized content"
 - Example: "System must remember user's progress between sessions"
 
@@ -137,11 +149,15 @@ After all stages:
 
 ## Slice signals guidance
 
+Each stage's structured block must include:
+- **Stage ID** — sequential (`S-1`, `S-2`, …). `slices-discovery` uses this as a stable reference key.
+- **Entities** — comma-separated domain entity names. `slices-discovery` uses these to propose scope and data questions.
+- **Slice signals** — plain-language descriptions of what the system must support. Merge PRD signals that belong to this stage here.
+
 Slice signals must be:
 - Written in plain language — what the user needs, not how to build it
-- Traceable to a specific stage
-- Free of architectural decisions (no "OAuth", "REST API", "database")
-- Actionable: `slice-discovery` uses them to pre-populate scope questions for functional slices
+- Free of architectural decisions (no "OAuth", "REST API", "database", "PostgreSQL")
+- Actionable: `slices-discovery` uses them to pre-populate Q4 (scope) and Q7 (data entities)
 
 Good: "User needs to identify themselves before proceeding"  
 Bad: "Implement JWT auth with refresh tokens"

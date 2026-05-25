@@ -36,10 +36,14 @@ find . -maxdepth 3 -type d -name "docs" | grep -v node_modules | grep -v ".git" 
 Read and summarize to the user what you found:
 
 - `docs/01_product/01_prd.md` → problem, scope
-- `docs/01_product/05_product_journey.md` → journey stages and their Slice signals
+- `docs/01_product/05_product_journey.md` → journey stages, Slice signals per stage, entities listed in each stage's structured signal block
+- `docs/04_tech/backend_architecture.md` → exists? (flag: `arch_backend`)
+- `docs/04_tech/frontend_architecture.md` → exists? (flag: `arch_frontend`)
 - `docs/05_scrum/discovery/S*.md` → count existing to determine next S number
 
-Extract from Journey: stage names, Slice signals per stage, entities mentioned. Store these — use them to pre-populate questions in Step 2 instead of asking from scratch.
+Extract from Journey: stage names, each stage's `**Stage ID:**`, `**Slice signals:**` list, and `**Entities:**` list. Store these — use them to pre-populate questions in the Functional Slice Interview instead of asking from scratch.
+
+Store flags `arch_backend` and `arch_frontend` — used in Q9/Q10 to decide whether to ask layer-specific or generic technical questions.
 
 ---
 
@@ -89,11 +93,14 @@ User confirms, corrects, or adds.
 **Q8 — UX flows:** Propose flows linked to the Journey stage.
 > "Journey stage [X] suggests [flow description]. Which UX flows or screens are involved? Not documented yet?"
 
-**Q9 — Frontend:** "What does the frontend need to implement? (new screen / component / modification / none)"
+**Q9 — Frontend:** Ask only if `arch_frontend` flag is set (file exists):
+> "What does the frontend need to implement? (new screen / component / modification / none)"
 
-**Q10 — Backend:** "What does the backend need to implement? (new endpoint / query / service / modification / none)"
+**Q10 — Backend:** Ask only if `arch_backend` flag is set (file exists):
+> "What does the backend need to implement? (new endpoint / query / service / modification / none)"
 
-Skip Q9/Q10 if no architecture docs found in Step 0 — ask generically: "What technical work is needed?"
+If neither flag is set → ask generically instead:
+> "What technical work is needed for this slice? (describe any layer)"
 
 **Q11 — Dependencies:**
 > "What could block PBI creation for this slice?"
@@ -233,7 +240,7 @@ Links: [reference to docs/02_business/data_model.md if applicable]
 
 [flows and screens involved]
 
-Links: [reference to docs/03_design/ux_spec.md if applicable]
+Links: [reference to relevant file(s) in docs/03_design/ — e.g. ux_[screen-name].md or ux_flows.md — if they exist]
 
 ## Frontend
 
