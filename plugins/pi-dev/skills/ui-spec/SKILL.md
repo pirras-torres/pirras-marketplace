@@ -190,7 +190,7 @@ Example: "Lucide Icons", "Custom SVGs", "SF Symbols (iOS only)"
 
 - Create `docs/03_design/` if missing
 - Write to `docs/03_design/ui_spec.md`
-- After writing, ask if user wants to create `docs/03_design/prototype_docs.md` using `kick-development:prototype-docs`
+- After writing, ask if user wants to create `docs/03_design/prototype_docs.md` using `pi-dev:prototype-docs`
 
 ## Quality Check Before Writing
 

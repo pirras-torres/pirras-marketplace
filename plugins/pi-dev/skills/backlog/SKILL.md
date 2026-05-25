@@ -40,9 +40,9 @@ Also read:
 - `docs/05_scrum/definition_of_ready.md` → if exists, use its AC format
 
 **If no slice files found:**
-> "No slice discovery documents found in docs/05_scrum/discovery/. Backlog requires at least one completed slice. Run kick-development:slices-discovery first."
+> "No slice discovery documents found in docs/05_scrum/discovery/. Backlog requires at least one completed slice. Run pi-dev:slices-discovery first."
 
-Stop and offer to invoke `kick-development:slices-discovery`.
+Stop and offer to invoke `pi-dev:slices-discovery`.
 
 **If slices found:** List them to the user:
 > "Found [N] slice(s): [S1: name], [S2: name], ..."

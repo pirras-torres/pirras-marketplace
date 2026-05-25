@@ -41,8 +41,8 @@ Read in this order:
 3. `docs/05_scrum/backlog.md` → extract stories for the active slice
 4. `docs/01_product/02_product_goal.md` if exists → Sprint Goal should advance Product Goal
 
-**If no backlog:** Stop. Tell user to run `kick-development:backlog` first (expects `docs/05_scrum/backlog.md`).  
-**If no DoR:** Stop. Tell user to run `kick-development:definition-of-ready` first (expects `docs/05_scrum/definition_of_ready.md`).
+**If no backlog:** Stop. Tell user to run `pi-dev:backlog` first (expects `docs/05_scrum/backlog.md`).  
+**If no DoR:** Stop. Tell user to run `pi-dev:definition-of-ready` first (expects `docs/05_scrum/definition_of_ready.md`).
 
 Calculate next sprint number: if memory says last sprint was N, this is N+1. If no sprint history, this is Sprint 1.
 

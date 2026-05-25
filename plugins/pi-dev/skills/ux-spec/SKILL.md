@@ -153,7 +153,7 @@ Each screen generates its own file. Cross-screen flows go in a separate file.
 - One file per screen: `docs/03_design/ux_[screen-name-kebab].md`
   - Example: `ux_dashboard.md`, `ux_account_detail.md`, `ux_add_account.md`
 - Cross-screen flows: `docs/03_design/ux_flows.md` — only if Q5 produced flows
-- After all files written, offer to create UI specs using `kick-development:ui-spec`
+- After all files written, offer to create UI specs using `pi-dev:ui-spec`
 
 ### Screen file template
 

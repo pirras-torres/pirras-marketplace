@@ -32,7 +32,7 @@ Read `docs/02_business/domain_model.md`. Extract:
 - All subdomains with their responsibilities
 - Entities and their states (if defined)
 
-**If domain model doesn't exist:** tell user to run `kick-development:domain-model` first. Business rules need the domain model as foundation.
+**If domain model doesn't exist:** tell user to run `pi-dev:domain-model` first. Business rules need the domain model as foundation.
 
 Tell user:
 > "I found [N] invariants in the domain model: [list them]. These will be included as Critical Rules. Now I'll ask about additional rules per subdomain."

@@ -157,7 +157,7 @@ States: [if applicable]
 
 - Create `docs/02_business/` folder if missing
 - Write to `docs/02_business/domain_model.md`
-- After writing, offer to also create `docs/02_business/business_rules.md` with expanded rules using `kick-development:business-rules`
+- After writing, offer to also create `docs/02_business/business_rules.md` with expanded rules using `pi-dev:business-rules`
 
 ## Quality Check Before Writing
 

@@ -107,20 +107,20 @@ Within the slice cycle, determine sub-state:
 
 **A — No active slice:**
 > "Ready to start slice discovery. No active slice in memory."  
-Suggest: `kick-development:slices-discovery`
+Suggest: `pi-dev:slices-discovery`
 
 **B — Discovery done for S#, no backlog yet:**
 > "S[N] discovery complete. Next: create backlog for S[N]."  
-Suggest: `kick-development:backlog`
+Suggest: `pi-dev:backlog`
 
 **C — Backlog exists, no sprint planned:**
 > "Backlog ready. Next: plan Sprint [N] from S[N] stories."  
-Suggest: `kick-development:sprint-planning`
+Suggest: `pi-dev:sprint-planning`
 
 **D — Sprint active (Planning done, Review not done):**
 > "Sprint [N] in progress. [X] stories active. Blocking issues: [from memory]."  
 Show sprint state. Ask if any stories are done or if there are blockers to record.  
-When sprint is complete: suggest `kick-development:sprint-review`
+When sprint is complete: suggest `pi-dev:sprint-review`
 
 **E — Sprint review done:**
 > "Sprint [N] closed. S[N] [complete/partial]."  
@@ -209,26 +209,26 @@ Update memory after EVERY guide session. Specifically update:
 
 | Phase | Document | Status | Skill |
 |-------|----------|--------|-------|
-| **Product** | PRD | ⬜/✅ | `kick-development:prd` |
-| **Product** | Product Goal | ⬜/✅ | `kick-development:product-goal` |
-| **Product** | Product Principles | ⬜/✅ | `kick-development:product-principles` |
-| **Product** | Personas | ⬜/✅ | `kick-development:personas` |
-| **Product** | Product Journey | ⬜/✅ | `kick-development:product-journey` |
-| **Business** | Domain Model | ⬜/✅ | `kick-development:domain-model` |
-| **Business** | Business Rules | ⬜/✅ | `kick-development:business-rules` |
-| **Business** | Data Model | ⬜/✅ | `kick-development:data-model` |
-| **Design** | UX Spec | ⬜/✅ | `kick-development:ux-spec` |
-| **Design** | UI Spec | ⬜/✅ | `kick-development:ui-spec` |
-| **Tech** | Backend Architecture | ⬜/✅ | `kick-development:backend-architecture` |
-| **Tech** | Frontend Architecture | ⬜/✅ | `kick-development:frontend-architecture` |
-| **Scrum** | Definition of Ready | ⬜/✅ | `kick-development:definition-of-ready` |
-| **Scrum** | Definition of Done | ⬜/✅ | `kick-development:definition-of-done` |
-| **Scrum** | Slice Discovery S# | ⬜/✅ | `kick-development:slices-discovery` |
-| **Scrum** | Backlog | ⬜/✅ | `kick-development:backlog` |
-| **Scrum** | Sprint Plan | ⬜/✅ | `kick-development:sprint-planning` |
-| **Scrum** | Sprint Review | ⬜/✅ | `kick-development:sprint-review` |
-| **Decisions** | Risk Register | ⬜/✅ | `kick-development:risk-docs` |
-| **Decisions** | Decision Log | ⬜/✅ | `kick-development:decision-docs` |
+| **Product** | PRD | ⬜/✅ | `pi-dev:prd` |
+| **Product** | Product Goal | ⬜/✅ | `pi-dev:product-goal` |
+| **Product** | Product Principles | ⬜/✅ | `pi-dev:product-principles` |
+| **Product** | Personas | ⬜/✅ | `pi-dev:personas` |
+| **Product** | Product Journey | ⬜/✅ | `pi-dev:product-journey` |
+| **Business** | Domain Model | ⬜/✅ | `pi-dev:domain-model` |
+| **Business** | Business Rules | ⬜/✅ | `pi-dev:business-rules` |
+| **Business** | Data Model | ⬜/✅ | `pi-dev:data-model` |
+| **Design** | UX Spec | ⬜/✅ | `pi-dev:ux-spec` |
+| **Design** | UI Spec | ⬜/✅ | `pi-dev:ui-spec` |
+| **Tech** | Backend Architecture | ⬜/✅ | `pi-dev:backend-architecture` |
+| **Tech** | Frontend Architecture | ⬜/✅ | `pi-dev:frontend-architecture` |
+| **Scrum** | Definition of Ready | ⬜/✅ | `pi-dev:definition-of-ready` |
+| **Scrum** | Definition of Done | ⬜/✅ | `pi-dev:definition-of-done` |
+| **Scrum** | Slice Discovery S# | ⬜/✅ | `pi-dev:slices-discovery` |
+| **Scrum** | Backlog | ⬜/✅ | `pi-dev:backlog` |
+| **Scrum** | Sprint Plan | ⬜/✅ | `pi-dev:sprint-planning` |
+| **Scrum** | Sprint Review | ⬜/✅ | `pi-dev:sprint-review` |
+| **Decisions** | Risk Register | ⬜/✅ | `pi-dev:risk-docs` |
+| **Decisions** | Decision Log | ⬜/✅ | `pi-dev:decision-docs` |
 
 ---
 

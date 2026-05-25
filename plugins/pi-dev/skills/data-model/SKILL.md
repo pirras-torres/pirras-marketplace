@@ -36,7 +36,7 @@ Read `docs/02_business/business_rules.md` if exists. Extract:
 - Validation rules (these become field constraints)
 - State transition rules (these become state field options)
 
-**If domain model doesn't exist:** tell user to run `kick-development:domain-model` first.
+**If domain model doesn't exist:** tell user to run `pi-dev:domain-model` first.
 
 Tell user:
 > "I found these entities in the domain model: [list]. I'll create a table for each. Some entities may be transient (no storage needed) — let me know which."
