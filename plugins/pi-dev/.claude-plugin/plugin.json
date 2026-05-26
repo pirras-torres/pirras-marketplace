@@ -1,8 +1,13 @@
 {
   "name": "pi-dev",
+  "version": "0.4.1",
   "description": "Skills for building software projects incrementally with Scrum documentation. Covers product, business, design, tech, and scrum phases.",
+  "skills": "./skills/",
   "author": {
     "name": "itorresh",
-    "email": "i.torres.h.esad@gmail.com"
-  }
+    "email": "i.torres.h.esad@gmail.com",
+    "url": "https://github.com/pirras-torres"
+  },
+  "homepage": "https://github.com/pirras-torres/pirras-marketplace",
+  "keywords": ["scrum", "product", "architecture", "planning", "documentation"]
 }
