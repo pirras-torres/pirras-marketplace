@@ -1,5 +1,10 @@
 {
   "name": "pirras-marketplace",
+  "owner": {
+    "name": "itorresh",
+    "email": "i.torres.h.esad@gmail.com",
+    "url": "https://github.com/pirras-torres"
+  },
   "interface": {
     "displayName": "Pirras Marketplace"
   },
