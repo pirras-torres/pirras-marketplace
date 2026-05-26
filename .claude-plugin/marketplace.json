@@ -22,7 +22,7 @@
       "source": {
         "source": "github",
         "repo": "pirras-torres/pirras-marketplace",
-        "path": "plugins/pi-dev"
+        "sparse": "plugins/pi-dev"
       }
     }
   ]
